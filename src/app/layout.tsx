@@ -1,6 +1,6 @@
 import "@/styles/globals.css";
 
-import { GeistSans } from "geist/font/sans";
+import { Mona_Sans as FontSans } from "next/font/google";
 import { type Metadata } from "next";
 
 import { TRPCReactProvider } from "@/trpc/react";
@@ -12,12 +12,21 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
+const fontSans = FontSans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${GeistSans.variable}`}>
-      <body>
+    <html lang="en" className={fontSans.className}>
+      <body
+        className={
+          "bg-background min-h-screen self-center font-sans antialiased"
+        }
+      >
         <TRPCReactProvider>
           <Providers>{children}</Providers>
         </TRPCReactProvider>

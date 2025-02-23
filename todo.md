@@ -7,6 +7,6 @@ Note:
 ## Day 1
 
   [*]: Database schema design.
-  [^]: Setup OAuth Github using NextAuth.
-  []: Shadcn setup with proper theaming.
-  []: Basic landing / dashboard page with a sidebar.
+  [*]: Setup OAuth Github using NextAuth.
+  [*]: Shadcn setup with proper theaming.
+  [*]: Basic landing page.

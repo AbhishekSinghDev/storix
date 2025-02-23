@@ -21,14 +21,21 @@ declare module "next-auth" {
 
 export const authConfig = {
   providers: [GitHub],
+  pages: {
+    signIn: "/signin",
+  },
   adapter: PrismaAdapter(db),
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session: ({ session, user }) => {
+      return {
+        ...session,
+        user: {
+          id: user.id,
+          name: session.user.name,
+          email: session.user.email,
+          image: session.user.image,
+        },
+      };
+    },
   },
 } satisfies NextAuthConfig;
