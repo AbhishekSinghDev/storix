@@ -10,3 +10,6 @@ Note:
   [*]: Setup OAuth Github using NextAuth.
   [*]: Shadcn setup with proper theaming.
   [*]: Basic landing page.
+
+## Day 2
+  [^]: Try to render a basic ui for the file tree thing.

@@ -14,6 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import ProfileButton from "./profile-button";
 import Logo from "../shared/logo";
+import ThemeToggleButton from "../shared/theme-toggle-button";
 
 type SiteHeaderProps = {
   isAuthenticated?: boolean;
@@ -143,7 +144,12 @@ const SiteHeader = ({ isAuthenticated }: SiteHeaderProps) => {
           </div>
         )}
 
-        {isAuthenticated && <ProfileButton />}
+        {isAuthenticated && (
+          <div className="flex items-center justify-center gap-4">
+            <ThemeToggleButton />
+            <ProfileButton />
+          </div>
+        )}
       </div>
     </motion.header>
   );

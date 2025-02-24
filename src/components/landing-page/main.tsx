@@ -237,31 +237,31 @@ const features = [
   },
 ] as const;
 
-const pricingPlans = [
-  {
-    name: "Free",
-    price: 0,
-    description: "Perfect for small communities and hobbyists.",
-    features: [
-      "1 bot",
-      "Up to 100 users",
-      "Basic command set",
-      "Community support",
-    ],
-    buttonText: "Start for Free",
-  },
-  {
-    name: "Pro",
-    price: 8,
-    description: "Ideal for growing communities and businesses.",
-    features: [
-      "Unlimited bots",
-      "Unlimited users",
-      "Advanced commands",
-      "Priority support",
-      "Custom branding",
-      "Analytics dashboard",
-    ],
-    buttonText: "Upgrade to Pro",
-  },
-] as const;
+// const pricingPlans = [
+//   {
+//     name: "Free",
+//     price: 0,
+//     description: "Perfect for small communities and hobbyists.",
+//     features: [
+//       "1 bot",
+//       "Up to 100 users",
+//       "Basic command set",
+//       "Community support",
+//     ],
+//     buttonText: "Start for Free",
+//   },
+//   {
+//     name: "Pro",
+//     price: 8,
+//     description: "Ideal for growing communities and businesses.",
+//     features: [
+//       "Unlimited bots",
+//       "Unlimited users",
+//       "Advanced commands",
+//       "Priority support",
+//       "Custom branding",
+//       "Analytics dashboard",
+//     ],
+//     buttonText: "Upgrade to Pro",
+//   },
+// ] as const;
