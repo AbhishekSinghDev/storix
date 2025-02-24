@@ -41,7 +41,7 @@ model User {
   email         String    @unique
   emailVerified DateTime?
   image         String    @default("default-user-icon.webp")
-  storageUsed   String
+  storageUsed   String    @default("0")
   s3AccessKey   String?
   s3SecretKey   String?
   s3Bucket      String?
