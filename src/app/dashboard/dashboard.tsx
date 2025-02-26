@@ -2,10 +2,11 @@
 
 import FileContainer from "@/components/shared/file-container";
 import FolderContainer from "@/components/shared/folder-container";
-import { Button } from "@/components/ui/button";
+import NewFileButton from "@/components/shared/new-file-button";
+import UploadButton from "@/components/shared/upload-button";
 import { DASHBOARD_MOCK_FILES, DASHBOARD_MOCK_FOLDERS } from "@/lib/constant";
 import { getFileIcon } from "@/lib/utils";
-import { CloudUpload, Folder, FolderPlus, HardDrive } from "lucide-react";
+import { Folder, HardDrive } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 const Dashboard = () => {
@@ -15,17 +16,13 @@ const Dashboard = () => {
     <div className="w-full">
       {/* Grid Header */}
       <div className="mb-4 rounded-lg p-4">
-        <div className="flex items-center justify-between">
+        <div className="hidden items-center justify-between lg:flex">
           <h2 className="flex items-center gap-2 text-lg font-semibold">
             <HardDrive className="size-5" /> {session?.user.name}&apos;s Drive
           </h2>
           <div className="flex gap-2">
-            <Button>
-              <FolderPlus /> New Folder
-            </Button>
-            <Button>
-              <CloudUpload /> Upload File
-            </Button>
+            <UploadButton variant="secondary" />
+            <NewFileButton variant="secondary" />
           </div>
         </div>
       </div>

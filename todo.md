@@ -14,3 +14,7 @@ Note:
 ## Day 2
   [*]: Try to render a basic ui for the file tree thing.
   [*]: Try to render a basic dashboard page with folders.
+
+## Day 3
+  [^]: Ask to s3 keys and add a configuration screen for bucket.
+  []: Try to implement upload button.
