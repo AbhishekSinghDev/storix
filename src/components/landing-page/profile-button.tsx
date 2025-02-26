@@ -38,7 +38,7 @@ const ProfileButton = () => {
           <DropdownMenuGroup>
             <DropdownMenuItem>Profile</DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href="/dashboard">Dashboard</Link>
+              <Link href="/dashboard/home">Dashboard</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>Settings</DropdownMenuItem>
           </DropdownMenuGroup>

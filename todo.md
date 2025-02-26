@@ -12,4 +12,5 @@ Note:
   [*]: Basic landing page.
 
 ## Day 2
-  [^]: Try to render a basic ui for the file tree thing.
+  [*]: Try to render a basic ui for the file tree thing.
+  [*]: Try to render a basic dashboard page with folders.

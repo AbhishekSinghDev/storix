@@ -1,9 +1,14 @@
+import Link from "next/link";
+
 const Logo = () => {
   return (
-    <span className="flex items-center gap-1 text-lg font-semibold sm:text-xl">
+    <Link
+      href="/"
+      className="flex items-center gap-1 bg-black text-lg font-semibold dark:bg-background sm:text-xl"
+    >
       <span className="bg-white px-1 text-black">Storix</span>
-      <span className="text-white">.app</span>
-    </span>
+      <span className="text-white dark:px-0">.app</span>
+    </Link>
   );
 };
 

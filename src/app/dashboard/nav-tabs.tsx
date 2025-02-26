@@ -38,7 +38,6 @@ const NavTabs = ({ projects }: NavTabsProps) => {
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      {/* <SidebarGroupLabel>Links</SidebarGroupLabel> */}
       <Separator className="mb-2" />
       <SidebarMenu>
         {projects.map((item) => (
@@ -78,12 +77,6 @@ const NavTabs = ({ projects }: NavTabsProps) => {
             </DropdownMenu>
           </SidebarMenuItem>
         ))}
-        {/* <SidebarMenuItem>
-          <SidebarMenuButton className="text-sidebar-foreground/70">
-            <MoreHorizontal className="text-sidebar-foreground/70" />
-            <span>More</span>
-          </SidebarMenuButton>
-        </SidebarMenuItem> */}
       </SidebarMenu>
     </SidebarGroup>
   );

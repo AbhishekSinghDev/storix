@@ -22,7 +22,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={fontSans.className}>
+    <html lang="en" className={fontSans.className} suppressHydrationWarning>
       {env.NODE_ENV === "development" && (
         <script
           crossOrigin="anonymous"

@@ -1,58 +1,76 @@
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Separator } from "@/components/ui/separator";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { AppSidebar } from "./app-sidebar";
-import type { Session } from "next-auth";
+"use client";
 
-type DashboardProps = {
-  session: Session;
-};
+import FileContainer from "@/components/shared/file-container";
+import FolderContainer from "@/components/shared/folder-container";
+import { Button } from "@/components/ui/button";
+import { DASHBOARD_MOCK_FILES, DASHBOARD_MOCK_FOLDERS } from "@/lib/constant";
+import { getFileIcon } from "@/lib/utils";
+import { CloudUpload, Folder, FolderPlus, HardDrive } from "lucide-react";
+import { useSession } from "next-auth/react";
 
-const Dashboard = ({ session }: DashboardProps) => {
+const Dashboard = () => {
+  const { data: session } = useSession();
+
   return (
-    <SidebarProvider>
-      <AppSidebar session={session} />
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="mr-2 h-4" />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+    <div className="w-full">
+      {/* Grid Header */}
+      <div className="mb-4 rounded-lg p-4">
+        <div className="flex items-center justify-between">
+          <h2 className="flex items-center gap-2 text-lg font-semibold">
+            <HardDrive className="size-5" /> {session?.user.name}&apos;s Drive
+          </h2>
+          <div className="flex gap-2">
+            <Button>
+              <FolderPlus /> New Folder
+            </Button>
+            <Button>
+              <CloudUpload /> Upload File
+            </Button>
           </div>
-        </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div className="aspect-video rounded-xl bg-muted/50" />
-            <div className="aspect-video rounded-xl bg-muted/50" />
-            <div className="aspect-video rounded-xl bg-muted/50" />
-          </div>
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
         </div>
-      </SidebarInset>
-    </SidebarProvider>
+      </div>
+
+      {/* Folders Section */}
+      <div className="mb-6">
+        <h3 className="mb-3 text-sm font-medium">Folders</h3>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-6">
+          {DASHBOARD_MOCK_FOLDERS.map((folder) => (
+            <FolderContainer
+              key={folder.id}
+              name={folder.name}
+              createdAt={new Date(folder.createdAt).toLocaleDateString()}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Files Section */}
+      <div>
+        <h3 className="mb-3 text-sm font-medium">Files</h3>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-6">
+          {DASHBOARD_MOCK_FILES.map((file) => (
+            <FileContainer
+              key={file.id}
+              Icon={getFileIcon(file.type)}
+              name={file.name}
+              size={file.size}
+              type={file.type}
+              createdAt={new Date(file.createdAt)}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Empty State */}
+      {DASHBOARD_MOCK_FOLDERS.length === 0 &&
+        DASHBOARD_MOCK_FILES.length === 0 && (
+          <div className="mt-8 p-8 text-center text-gray-500">
+            <Folder className="mx-auto mb-4 h-12 w-12 text-gray-400" />
+            <p className="text-lg">This folder is empty</p>
+            <p className="text-sm">Drop files here or use the upload button</p>
+          </div>
+        )}
+    </div>
   );
 };
 

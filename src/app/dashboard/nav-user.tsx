@@ -26,6 +26,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import type { Session } from "next-auth";
+import { signOut } from "next-auth/react";
 
 type NavUserProps = {
   session: Session;
@@ -33,6 +34,9 @@ type NavUserProps = {
 
 export function NavUser({ session }: NavUserProps) {
   const { isMobile } = useSidebar();
+  const handleLogout = async () => {
+    await signOut();
+  };
 
   return (
     <SidebarMenu>
@@ -48,7 +52,9 @@ export function NavUser({ session }: NavUserProps) {
                   src={session.user.image ?? undefined}
                   alt={session.user.name ?? undefined}
                 />
-                <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                <AvatarFallback className="rounded-lg">
+                  {session.user.name?.slice(0, 2)}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">
@@ -72,7 +78,9 @@ export function NavUser({ session }: NavUserProps) {
                     src={session.user.image ?? undefined}
                     alt={session.user.name ?? undefined}
                   />
-                  <AvatarFallback className="rounded-lg">CN</AvatarFallback>
+                  <AvatarFallback className="rounded-lg">
+                    {session.user.name?.slice(0, 2)}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">
@@ -105,7 +113,7 @@ export function NavUser({ session }: NavUserProps) {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={async () => await handleLogout()}>
               <LogOut />
               Log out
             </DropdownMenuItem>
