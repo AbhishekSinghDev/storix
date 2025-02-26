@@ -1,5 +1,5 @@
 import type { FileTypeEnum } from "@prisma/client";
-import { Folder, File, Image, Video, Music, BookText } from "lucide-react";
+import { File, Image, Video, Music, BookText } from "lucide-react";
 
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
