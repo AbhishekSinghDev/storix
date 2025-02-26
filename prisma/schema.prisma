@@ -36,16 +36,17 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String
-  email         String    @unique
-  emailVerified DateTime?
-  image         String    @default("default-user-icon.webp")
-  storageUsed   String    @default("0")
-  s3AccessKey   String?
-  s3SecretKey   String?
-  s3Bucket      String?
-  s3Region      String?
+  id             String    @id @default(cuid())
+  name           String
+  email          String    @unique
+  emailVerified  DateTime?
+  image          String    @default("default-user-icon.webp")
+  storageUsed    String    @default("0")
+  s3AccessKey    String?
+  s3SecretKey    String?
+  s3Bucket       String?
+  s3Region       String?
+  s3ConfiguredAt DateTime?
 
   folders  Folder[]
   accounts Account[]

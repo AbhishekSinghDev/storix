@@ -3,7 +3,7 @@
 import FileContainer from "@/components/shared/file-container";
 import FolderContainer from "@/components/shared/folder-container";
 import NewFileButton from "@/components/shared/new-file-button";
-import UploadButton from "@/components/shared/upload-button";
+import UploadFileButton from "@/components/shared/upload-file-button";
 import { DASHBOARD_MOCK_FILES, DASHBOARD_MOCK_FOLDERS } from "@/lib/constant";
 import { getFileIcon } from "@/lib/utils";
 import { Folder, HardDrive } from "lucide-react";
@@ -21,7 +21,7 @@ const Dashboard = () => {
             <HardDrive className="size-5" /> {session?.user.name}&apos;s Drive
           </h2>
           <div className="flex gap-2">
-            <UploadButton variant="secondary" />
+            <UploadFileButton variant="secondary" />
             <NewFileButton variant="secondary" />
           </div>
         </div>

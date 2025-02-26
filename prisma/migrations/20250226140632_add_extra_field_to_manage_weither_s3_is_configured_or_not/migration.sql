@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "s3ConfiguredAt" TIMESTAMP(3),
+ALTER COLUMN "emailVerified" DROP NOT NULL,
+ALTER COLUMN "storageUsed" SET DEFAULT '0',
+ALTER COLUMN "storageUsed" SET DATA TYPE TEXT;
