@@ -17,4 +17,5 @@ Note:
 
 ## Day 3
   [*]: Ask to s3 keys and add a configuration screen for bucket.
+  [^]: Complete credentials authentication.
   []: Try to implement upload button.

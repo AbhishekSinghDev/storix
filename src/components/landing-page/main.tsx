@@ -11,7 +11,9 @@ import {
   Upload,
   Settings,
   Globe,
+  Play,
 } from "lucide-react";
+import Link from "next/link";
 
 const Main = () => {
   return (
@@ -59,11 +61,13 @@ const Main = () => {
             transition={{ delay: 0.6 }}
             className="flex gap-4"
           >
-            <Button size="lg" className="h-12 px-8">
-              Start Uploading
+            <Button size="lg" className="h-12 px-8" asChild>
+              <Link href="/register">
+                Start Uploading <Upload />
+              </Link>
             </Button>
             <Button size="lg" variant="outline" className="h-12 px-8">
-              Explore Demo
+              Explore Demo <Play />
             </Button>
           </motion.div>
         </motion.div>
@@ -188,8 +192,10 @@ const Main = () => {
             Start managing your files with ease—secure, fast, and fully
             customizable with your own S3 storage. 🚀
           </p>
-          <Button size="lg" className="mt-4">
-            Start Uploading Now
+          <Button size="lg" className="mt-4" asChild>
+            <Link href="/register">
+              Uploading Now <Upload />
+            </Link>
           </Button>
         </motion.div>
       </section>

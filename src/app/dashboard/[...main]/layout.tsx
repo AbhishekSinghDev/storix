@@ -14,13 +14,13 @@ import UploadFileDialog from "@/components/shared/upload-file-dialog";
 import { api } from "@/trpc/server";
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
-  const config = await api.user.isS3Configured();
   const session = await auth();
 
   if (!session?.user) {
     redirect("/");
   }
 
+  const config = await api.user.isS3Configured();
   if (!config.isS3Configured) {
     redirect("/dashboard");
   }

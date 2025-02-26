@@ -10,7 +10,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
 import Link from "next/link";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,19 +24,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { signIn } from "next-auth/react";
 import { signInFormSchema } from "@/lib/zod-schema";
-import { toast } from "sonner";
-import { useState } from "react";
-import type { ButtonProps, TStatus } from "@/lib/types";
 import Loading from "@/components/shared/loading";
-import { useRouter } from "next/navigation";
+import OAuthButton from "@/components/shared/oauth-button";
+import GithubAuthButton from "@/components/shared/github-auth-button";
+import { useState } from "react";
+import type { TStatus } from "@/lib/types";
 
 const SigninForm = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) => {
-  const router = useRouter();
   const [status, setStatus] = useState<TStatus>("idle");
 
   const form = useForm<z.infer<typeof signInFormSchema>>({
@@ -47,33 +44,6 @@ const SigninForm = ({
       password: "",
     },
   });
-
-  const handleGithubAuth = async () => {
-    try {
-      setStatus("loading");
-      const res = await signIn("github");
-
-      if (res?.ok) {
-        setStatus("success");
-        router.push("/");
-        toast.success("Authentication Successfull");
-        return;
-      }
-
-      if (!res?.ok || !res.error) {
-        setStatus("error");
-        toast.error("Unauthorized!");
-        return;
-      }
-
-      setStatus("error");
-      toast.error("Something unexpected happend!");
-    } catch (err) {
-      setStatus("error");
-      console.error(err);
-      toast.error("Internal Server Error");
-    }
-  };
 
   const onSubmit = (values: z.infer<typeof signInFormSchema>) => {
     console.log(values);
@@ -100,12 +70,7 @@ const SigninForm = ({
                 <div>
                   <div className="grid gap-6">
                     <div className="flex flex-col gap-4">
-                      <OAuthButton
-                        alt="github"
-                        icon="/icons/github.svg"
-                        text="Login with Github"
-                        onClick={async () => await handleGithubAuth()}
-                      />
+                      <GithubAuthButton purpose="login" setStatus={setStatus} />
                       <OAuthButton
                         alt="google"
                         icon="/icons/google.svg"
@@ -196,32 +161,3 @@ const SigninForm = ({
 };
 
 export default SigninForm;
-
-type OAuthButtonProps = ButtonProps & {
-  alt: string;
-  icon: string;
-  text: string;
-  iconClassName?: string;
-};
-
-const OAuthButton = ({
-  alt,
-  icon,
-  text,
-  className,
-  iconClassName,
-  ...props
-}: OAuthButtonProps) => {
-  return (
-    <Button variant="outline" className={cn("w-full", className)} {...props}>
-      <Image
-        src={icon}
-        alt={alt}
-        height={100}
-        width={100}
-        className={cn("size-6 dark:invert", iconClassName)}
-      />
-      {text}
-    </Button>
-  );
-};
