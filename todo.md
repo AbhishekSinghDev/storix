@@ -19,3 +19,6 @@ Note:
   [*]: Ask to s3 keys and add a configuration screen for bucket.
   [^]: Complete credentials authentication.
   []: Try to implement upload button.
+
+## Day 4
+  [^]: Add aws router for getting presigend url and private url thing.

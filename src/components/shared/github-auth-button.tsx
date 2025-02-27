@@ -5,6 +5,7 @@ import OAuthButton from "./oauth-button";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import type { TStatus } from "@/lib/types";
+import { api } from "@/trpc/react";
 
 type GithubAuthButtonProps = {
   purpose: "login" | "register";
@@ -14,6 +15,8 @@ type GithubAuthButtonProps = {
 const GithubAuthButton = ({ setStatus, purpose }: GithubAuthButtonProps) => {
   const router = useRouter();
 
+  const {mutate: createRootFolderOnOAuthSignup} = api.auth.createRootFolderOnOAuthSignup.useMutation()
+ 
   const handleGithubAuth = async () => {
     try {
       setStatus("loading");
@@ -21,6 +24,8 @@ const GithubAuthButton = ({ setStatus, purpose }: GithubAuthButtonProps) => {
 
       if (res?.ok) {
         setStatus("success");
+        // TODO: This thing below is more error prone and can have a lot of race-conditions. fix later
+        createRootFolderOnOAuthSignup()
         router.push("/");
         toast.success("Authentication Successfull");
         return;

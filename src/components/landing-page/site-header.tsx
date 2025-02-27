@@ -86,6 +86,7 @@ const SiteHeader = ({ isAuthenticated }: SiteHeaderProps) => {
 
         {!isAuthPage && !isAuthenticated && (
           <div className="flex items-center space-x-4">
+            <ThemeToggleButton />
             <Button variant="ghost" size="sm" asChild>
               <Link href="/signin">Log in</Link>
             </Button>

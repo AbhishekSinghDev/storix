@@ -3,6 +3,8 @@ import type { MockFile, MockFolder } from "./types";
 
 export const UPLOAD_DIALOG_STATE_KEY = "file_upload";
 
+export const STORIX_DIR_PREFIX = "/storix";
+
 export const AWS_REGIONS = {
   "us-east-1": "US East (N. Virginia)",
   "us-east-2": "US East (Ohio)",

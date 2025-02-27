@@ -1,5 +1,7 @@
+import OTPVerificationForm from "./otp-verification-form";
+
 const page = () => {
-  return <>otp verification</>;
+  return <><OTPVerificationForm /></>;
 };
 
 export default page;
