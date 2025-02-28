@@ -273,3 +273,122 @@ export const DASHBOARD_MOCK_FILES: MockFile[] = [
     createdAt: "2024-01-19",
   },
 ];
+
+export const FILE_EXTENSIONS = {
+  IMAGE: [
+    ".jpg",
+    ".jpeg",
+    ".png",
+    ".gif",
+    ".bmp",
+    ".webp",
+    ".ico",
+    ".svg",
+    ".tiff",
+    ".heif",
+    ".heic",
+  ],
+  AUDIO: [
+    ".mp3",
+    ".wav",
+    ".ogg",
+    ".m4a",
+    ".aac",
+    ".wma",
+    ".flac",
+    ".alac",
+    ".aiff",
+    ".midi",
+  ],
+  VIDEO: [
+    ".mp4",
+    ".webm",
+    ".ogg",
+    ".mov",
+    ".avi",
+    ".wmv",
+    ".flv",
+    ".mkv",
+    ".m4v",
+    ".3gp",
+    ".3g2",
+  ],
+  DOCUMENT: [
+    ".pdf",
+    ".doc",
+    ".docx",
+    ".xls",
+    ".xlsx",
+    ".ppt",
+    ".pptx",
+    ".odt",
+    ".ods",
+    ".odp",
+    ".txt",
+    ".rtf",
+    ".md",
+    ".csv",
+  ],
+  ARCHIVE: [".zip", ".rar", ".7z", ".tar", ".gz", ".bz2"],
+  CODE: [
+    ".json",
+    ".xml",
+    ".html",
+    ".css",
+    ".js",
+    ".ts",
+    ".jsx",
+    ".tsx",
+    ".py",
+    ".java",
+    ".cpp",
+    ".c",
+    ".php",
+  ],
+};
+
+export const ACCEPTED_MIME_TYPES = {
+  // Images
+  "image/*": FILE_EXTENSIONS.IMAGE,
+
+  // Audio
+  "audio/*": FILE_EXTENSIONS.AUDIO,
+
+  // Video
+  "video/*": FILE_EXTENSIONS.VIDEO,
+
+  // Documents
+  "application/pdf": [".pdf"],
+  "application/msword": [".doc"],
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [
+    ".docx",
+  ],
+  "application/vnd.ms-excel": [".xls"],
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
+    ".xlsx",
+  ],
+  "application/vnd.ms-powerpoint": [".ppt"],
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation": [
+    ".pptx",
+  ],
+  "text/plain": [".txt"],
+  "text/markdown": [".md"],
+  "text/csv": [".csv"],
+
+  // Archives
+  "application/zip": [".zip"],
+  "application/x-rar-compressed": [".rar"],
+  "application/x-7z-compressed": [".7z"],
+  "application/x-tar": [".tar"],
+  "application/gzip": [".gz"],
+
+  // Code
+  "application/json": [".json"],
+  "text/xml": [".xml"],
+  "text/html": [".html"],
+  "text/css": [".css"],
+  "text/javascript": [".js"],
+  "text/typescript": [".ts"],
+};
+
+export const MAX_FILE_SIZE = 1 * 1024 * 1024 * 1024;
