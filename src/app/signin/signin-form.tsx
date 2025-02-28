@@ -30,11 +30,15 @@ import OAuthButton from "@/components/shared/oauth-button";
 import GithubAuthButton from "@/components/shared/github-auth-button";
 import { useState } from "react";
 import type { TStatus } from "@/lib/types";
+import { signIn } from "next-auth/react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const SigninForm = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) => {
+  const router = useRouter();
   const [status, setStatus] = useState<TStatus>("idle");
 
   const form = useForm<z.infer<typeof signInFormSchema>>({
@@ -45,8 +49,30 @@ const SigninForm = ({
     },
   });
 
-  const onSubmit = (values: z.infer<typeof signInFormSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof signInFormSchema>) => {
+    try {
+      setStatus("loading");
+
+      const result = await signIn("credentials", {
+        email: values.email,
+        password: values.password,
+        redirect: false,
+      });
+
+      console.log("resp: ", result);
+
+      if (result?.ok && result.status === 200) {
+        setStatus("success");
+        router.push("/dashboard");
+        toast.success("Signed in successfully!");
+      } else {
+        setStatus("error");
+        toast.error("Invalid credentials");
+      }
+    } catch (error) {
+      setStatus("error");
+      toast.error("Something went wrong");
+    }
   };
 
   return (

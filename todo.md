@@ -17,7 +17,7 @@ Note:
 
 ## Day 3
   [*]: Ask to s3 keys and add a configuration screen for bucket.
-  [^]: Complete credentials authentication.
+  [*]: Complete credentials authentication. {TODO: implementation completed but still broke i don't know why tried to debug but no fix i found. i look into it later.}
   []: Try to implement upload button.
 
 ## Day 4

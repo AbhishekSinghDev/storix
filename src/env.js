@@ -20,6 +20,10 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
+    SMTP_USER: z.string(),
+    SMTP_PASS: z.string(),
+    SMTP_HOST: z.string(),
+    SMTP_PORT: z.string(),
   },
 
   client: {
@@ -39,6 +43,10 @@ export const env = createEnv({
     AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
     AWS_REGION: process.env.AWS_REGION,
     AWS_BUCKET_NAME: process.env.AWS_BUCKET_NAME,
+    SMTP_USER: process.env.SMTP_USER,
+    SMTP_PASS: process.env.SMTP_PASS,
+    SMTP_HOST: process.env.SMTP_HOST,
+    SMTP_PORT: process.env.SMTP_PORT,
   },
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
   emptyStringAsUndefined: true,

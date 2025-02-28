@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import type { FileTypeEnum } from "@prisma/client";
 import { File, Image, Video, Music, BookText } from "lucide-react";
 
@@ -27,4 +28,8 @@ export const formatFileSize = (bytes: number) => {
   if (bytes < 1024) return bytes + " B";
   else if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
   else return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+};
+
+export const generateOtp = (): string => {
+  return crypto.randomInt(100000, 999999).toString();
 };

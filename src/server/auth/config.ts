@@ -1,8 +1,10 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
 
 import { db } from "@/server/db";
 import GitHub from "next-auth/providers/github";
+import { authenticate } from "./authenticate";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -20,12 +22,46 @@ declare module "next-auth" {
 }
 
 export const authConfig = {
-  providers: [GitHub],
+  providers: [
+    GitHub,
+    Credentials({
+      id: "credentials",
+      name: "Credentials",
+      credentials: {
+        email: {
+          label: "Email",
+          type: "email",
+          placeholder: "hello@example.com",
+        },
+        password: {
+          label: "Password",
+          type: "password",
+          placeholder: "********",
+        },
+      },
+      async authorize(credentials) {
+        return await authenticate(credentials);
+      },
+    }),
+  ],
   pages: {
     signIn: "/signin",
   },
   adapter: PrismaAdapter(db),
   callbacks: {
+    jwt: async ({ token, user }) => {
+      console.log("token: ", token);
+      console.log("user: ", user);
+
+      if (user) {
+        token.id = user.id;
+        token.email = user.email;
+        token.name = user.name;
+        token.image = user.image;
+      }
+
+      return token;
+    },
     session: ({ session, user }) => {
       return {
         ...session,

@@ -1,6 +1,7 @@
 import { registerFormSchema } from "@/lib/zod-schema";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
+import { hashPassword } from "@/lib/password";
 
 const authRouter = createTRPCRouter({
   createRootFolderOnOAuthSignup: protectedProcedure.mutation(
@@ -49,13 +50,15 @@ const authRouter = createTRPCRouter({
           });
         }
 
+        const hashedPassword = await hashPassword(confirmPassword);
+
         await ctx.db.$transaction(async (tx) => {
           // create new user
           const newUser = await tx.user.create({
             data: {
               name: name,
               email: email,
-              password: confirmPassword,
+              password: hashedPassword,
             },
             select: {
               id: true,
@@ -73,11 +76,8 @@ const authRouter = createTRPCRouter({
           });
         });
 
-        // send email otp here
-        // then set that otp to user db.
-
         return {
-          message: "Account created successfully!",
+          message: "Please login to your account.",
         };
       } catch (err) {
         console.error("Failed to register user: ", err);

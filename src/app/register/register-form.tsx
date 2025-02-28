@@ -52,7 +52,7 @@ const RegisterForm = ({
     registerUser(values, {
       onSuccess: (opts) => {
         toast.success(opts.message);
-        router.push("/otp-verification");
+        router.push("/signin");
       },
       onError: (opts) => {
         toast.error(opts.message);

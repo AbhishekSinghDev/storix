@@ -40,6 +40,8 @@ model User {
   name           String
   email          String    @unique
   password       String?
+  otp            String?   @unique
+  otpSentAt      DateTime?
   emailVerified  DateTime?
   image          String    @default("default-user-icon.webp")
   storageUsed    String    @default("0")
