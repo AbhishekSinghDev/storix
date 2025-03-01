@@ -23,8 +23,7 @@ const dashboardRouter = createTRPCRouter({
     }
   }),
 
-  // this api returns all the folders and files present at the given path
-  getFoldersAccordingToPath: protectedProcedure
+  getFoldersAndFilesAccordingToPath: protectedProcedure
     .input(z.object({ path: z.string().min(1) }))
     .query(async ({ ctx, input }) => {
       try {
@@ -38,23 +37,9 @@ const dashboardRouter = createTRPCRouter({
           },
         });
 
-        return folders;
-      } catch (err) {
-        console.error("Failed to fetch level one folders: ", err);
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to level one fetch folders",
-        });
-      }
-    }),
-
-  getFilesAccordingToParentPath: protectedProcedure
-    .input(z.object({ parentPath: z.string().min(1) }))
-    .query(async ({ ctx, input }) => {
-      try {
         const files = await ctx.db.file.findMany({
           where: {
-            parentPath: { equals: input.parentPath },
+            parentPath: { equals: input.path },
             folder: {
               userId: ctx.session.user.id,
             },
@@ -64,7 +49,10 @@ const dashboardRouter = createTRPCRouter({
           },
         });
 
-        return files;
+        return {
+          folders: folders,
+          files: files,
+        };
       } catch (err) {
         console.error("Failed to fetch level one folders: ", err);
         throw new TRPCError({
