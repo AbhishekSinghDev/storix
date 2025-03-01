@@ -1,33 +1,20 @@
-"use client";
-
 import FileContainer from "@/components/shared/file-container";
 import FolderContainer from "@/components/shared/folder-container";
 import NewFolderButton from "@/components/shared/new-folder-button";
 import UploadFileButton from "@/components/shared/upload-file-button";
 import UploadFileDropZone from "@/components/shared/upload-file-dropzone";
-import FileSkeleton from "@/components/skeleton/file-skeleton";
-import FolderSkeleton from "@/components/skeleton/folder-skeleton";
-import usePath from "@/hooks/use-path";
-import { getFileIcon } from "@/lib/utils";
-import { api } from "@/trpc/react";
-import { HardDrive } from "lucide-react";
-import { useSession } from "next-auth/react";
+import type { TFile, TFolder } from "@/lib/prisma-extended-types";
+import { auth } from "@/server/auth";
+import { Folder, HardDrive, File } from "lucide-react";
 
-const Dashboard = () => {
-  const { path } = usePath();
-  const { data: session } = useSession();
+type DashboardProps = {
+  folders: TFolder[];
+  files: TFile[];
+};
 
-  const { data: folders, isPending: isPendingFolders } =
-    api.dashboard.getFoldersAccordingToPath.useQuery({
-      path: path,
-    });
-  const { data: files, isPending: isPendingFiles } =
-    api.dashboard.getFilesAccordingToParentPath.useQuery({
-      parentPath: path,
-    });
-
-  const isLoading = isPendingFolders || isPendingFiles;
-  const isEmpty = !isLoading && folders?.length === 0 && files?.length === 0;
+const Dashboard = async ({ folders, files }: DashboardProps) => {
+  const session = await auth();
+  const isEmpty = folders.length === 0 && files.length === 0;
 
   return (
     <div className="w-full">
@@ -53,41 +40,40 @@ const Dashboard = () => {
           {/* Folders Section */}
           <div className="mb-6">
             <h3 className="mb-3 text-sm font-medium">Folders</h3>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-6">
-              {isPendingFolders
-                ? Array.from({ length: 5 }).map((_, idx) => (
-                    <FolderSkeleton key={idx} />
-                  ))
-                : folders?.map((item) => (
-                    <FolderContainer
-                      key={item.id}
-                      name={item.name}
-                      href={item.path + "/" + item.name}
-                      createdAt={item.createdAt.toLocaleDateString()}
-                    />
-                  ))}
-            </div>
+            {folders.length > 0 ? (
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-6">
+                {folders.map((item) => (
+                  <FolderContainer
+                    key={item.id}
+                    name={item.name}
+                    href={item.path + "/" + item.name}
+                    createdAt={item.createdAt.toLocaleDateString()}
+                  />
+                ))}
+              </div>
+            ) : (
+              <EmptyState type="folder" />
+            )}
           </div>
 
           {/* Files Section */}
           <div>
             <h3 className="mb-3 text-sm font-medium">Files</h3>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-6">
-              {isPendingFiles
-                ? Array.from({ length: 5 }).map((_, idx) => (
-                    <FileSkeleton key={idx} />
-                  ))
-                : files?.map((item) => (
-                    <FileContainer
-                      key={item.id}
-                      Icon={getFileIcon(item.type)}
-                      name={item.name}
-                      size={Number(item.size)}
-                      type={item.type}
-                      createdAt={item.createdAt}
-                    />
-                  ))}
-            </div>
+            {files.length > 0 ? (
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-6">
+                {files.map((item) => (
+                  <FileContainer
+                    key={item.id}
+                    name={item.name}
+                    size={Number(item.size)}
+                    type={item.type}
+                    createdAt={item.createdAt}
+                  />
+                ))}
+              </div>
+            ) : (
+              <EmptyState type="file" />
+            )}
           </div>
         </>
       )}
@@ -96,3 +82,29 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+const EmptyState = ({ type }: { type: "folder" | "file" }) => {
+  return (
+    <div className="flex min-h-[200px] flex-col items-center justify-center rounded-lg border border-dashed">
+      {type === "folder" ? (
+        <>
+          <Folder className="mb-2 size-8 text-muted-foreground" />
+          <p className="text-sm text-muted-foreground">
+            No folders created yet
+          </p>
+          <p className="text-xs text-muted-foreground">
+            Click the &quot;New Folder&quot; button to create one
+          </p>
+        </>
+      ) : (
+        <>
+          <File className="mb-2 size-8 text-muted-foreground" />
+          <p className="text-sm text-muted-foreground">No files uploaded yet</p>
+          <p className="text-xs text-muted-foreground">
+            Drag and drop files or use the &quot;Upload&quot; button
+          </p>
+        </>
+      )}
+    </div>
+  );
+};

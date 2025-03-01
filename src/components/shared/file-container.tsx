@@ -3,12 +3,10 @@
 import React from "react";
 
 import type { DivProps } from "@/lib/types";
-import { cn, formatFileSize } from "@/lib/utils";
-import type { LucideIcon } from "lucide-react";
+import { cn, formatFileSize, getFileIcon } from "@/lib/utils";
 import type { FileTypeEnum } from "@prisma/client";
 
 type FileProps = DivProps & {
-  Icon: LucideIcon;
   name: string;
   size: number;
   createdAt: Date;
@@ -16,7 +14,6 @@ type FileProps = DivProps & {
 };
 
 const FileContainer = ({
-  Icon,
   name,
   size,
   type,
@@ -24,6 +21,8 @@ const FileContainer = ({
   className,
   ...props
 }: FileProps) => {
+  const Icon = getFileIcon(type);
+
   return (
     <div
       className={cn(
