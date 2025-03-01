@@ -9,9 +9,10 @@ import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
 import NavigationBreadcumbs from "../navigation-breadcrumbs";
 import UploadFileButton from "@/components/shared/upload-file-button";
-import NewFileButton from "@/components/shared/new-file-button";
+import NewFolderButton from "@/components/shared/new-folder-button";
 import UploadFileDialog from "@/components/shared/upload-file-dialog";
 import { api } from "@/trpc/server";
+import NewFolderDialog from "@/components/shared/new-folder-dialog";
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
@@ -23,6 +24,11 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
   const config = await api.user.isS3Configured();
   if (!config.isS3Configured) {
     redirect("/dashboard");
+  }
+
+  const rootFolder = await api.dashboard.getRootFolder();
+  if (!rootFolder) {
+    redirect("/signin");
   }
 
   return (
@@ -42,7 +48,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
                     textClassName="sr-only"
                     variant="secondary"
                   />
-                  <NewFileButton
+                  <NewFolderButton
                     className="lg:hidden"
                     textClassName="sr-only"
                     variant="secondary"
@@ -56,6 +62,7 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
       </SidebarProvider>
 
       <UploadFileDialog />
+      <NewFolderDialog folder={rootFolder} />
     </>
   );
 };

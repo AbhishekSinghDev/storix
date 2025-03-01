@@ -48,11 +48,25 @@ export const authConfig = {
     signIn: "/signin",
   },
   adapter: PrismaAdapter(db),
+  events: {
+    async createUser({ user }) {
+      if (!user.id) throw new Error("Failed to create user.");
+
+      try {
+        await db.folder.create({
+          data: {
+            name: "home",
+            path: "/",
+            userId: user.id,
+          },
+        });
+      } catch (err) {
+        console.error("Failed to create root folder for OAuth user: ", err);
+      }
+    },
+  },
   callbacks: {
     jwt: async ({ token, user }) => {
-      console.log("token: ", token);
-      console.log("user: ", user);
-
       if (user) {
         token.id = user.id;
         token.email = user.email;

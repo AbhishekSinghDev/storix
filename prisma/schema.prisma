@@ -86,7 +86,6 @@ model Folder {
   userId String
   user   User   @relation(fields: [userId], references: [id])
 
-  @@unique([userId, path]) // Prevents duplicate paths for same user
   @@index([userId])
   @@index([path])
   @@index([parentId])

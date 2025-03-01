@@ -70,3 +70,24 @@ export const bucketConfigurationSchema = z
     }),
   })
   .strict();
+
+export const createFolderSchema = z.object({
+  name: z
+    .string()
+    .min(1, { message: "Folder name is required" })
+    .max(255, { message: "Folder name is too long" })
+    .regex(/^[a-zA-Z0-9-_. ]+$/, {
+      message:
+        "Folder name can only contain letters, numbers, spaces, dots, dashes, and underscores",
+    })
+    .transform((name) => name.trim()),
+  parentId: z
+    .string()
+    .min(1, { message: "Parent ID must not be empty" })
+    .optional(),
+  path: z
+    .string()
+    .min(1, { message: "Path is required" })
+    .max(1000, { message: "Path is too long" })
+    .regex(/^\/?([\w-]+\/)*[\w-]*$/, { message: "Invalid path format" }),
+});

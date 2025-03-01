@@ -1,11 +1,9 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import OAuthButton from "./oauth-button";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import type { TStatus } from "@/lib/types";
-import { api } from "@/trpc/react";
 
 type GithubAuthButtonProps = {
   purpose: "login" | "register";
@@ -13,36 +11,33 @@ type GithubAuthButtonProps = {
 };
 
 const GithubAuthButton = ({ setStatus, purpose }: GithubAuthButtonProps) => {
-  const router = useRouter();
-
-  const {mutate: createRootFolderOnOAuthSignup} = api.auth.createRootFolderOnOAuthSignup.useMutation()
- 
   const handleGithubAuth = async () => {
     try {
       setStatus("loading");
-      const res = await signIn("github");
 
-      if (res?.ok) {
-        setStatus("success");
-        // TODO: This thing below is more error prone and can have a lot of race-conditions. fix later
-        createRootFolderOnOAuthSignup()
-        router.push("/");
-        toast.success("Authentication Successfull");
-        return;
-      }
+      const result = await signIn("github", {
+        redirect: false,
+        callbackUrl: "/",
+      });
 
-      if (!res?.ok || !res.error) {
+      if (result?.error) {
         setStatus("error");
-        toast.error("Unauthorized!");
+        toast.error(
+          result.error === "OAuthSignin"
+            ? "Authentication failed"
+            : result.error,
+        );
         return;
       }
 
-      setStatus("error");
-      toast.error("Something unexpected happend!");
+      setStatus("success");
+      toast.success("Authentication successful");
     } catch (err) {
       setStatus("error");
-      console.error(err);
-      toast.error("Internal Server Error");
+      console.error("GitHub authentication error:", err);
+      toast.error("Failed to authenticate with GitHub");
+    } finally {
+      setStatus("idle");
     }
   };
 
@@ -52,7 +47,7 @@ const GithubAuthButton = ({ setStatus, purpose }: GithubAuthButtonProps) => {
       icon="/icons/github.svg"
       text={purpose === "login" ? "Login with Github" : "Continue with Github"}
       iconClassName="size-6"
-      onClick={async () => await handleGithubAuth()}
+      onClick={handleGithubAuth}
     />
   );
 };

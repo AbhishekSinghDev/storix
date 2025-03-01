@@ -1,22 +1,33 @@
 "use client";
 
-import type { DivProps } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Folder } from "lucide-react";
+import Link, { type LinkProps } from "next/link";
 
-type FolderContainerProps = DivProps & {
+type FolderContainerProps = LinkProps & {
   name: string;
+  className?: string;
   createdAt: string;
 };
 
 const FolderContainer = ({
   name,
+  href,
   createdAt,
   className,
   ...props
 }: FolderContainerProps) => {
+  const fullPath =
+    typeof href === "string"
+      ? `/dashboard${href}`
+      : {
+          pathname: `/dashboard${href.pathname ?? ""}`,
+          ...href,
+        };
+
   return (
-    <div
+    <Link
+      href={fullPath}
       className={cn(
         "group flex cursor-pointer flex-col rounded-lg border p-4 transition-colors hover:bg-secondary",
         className,
@@ -28,7 +39,7 @@ const FolderContainer = ({
         <span className="truncate group-hover:text-blue-500">{name}</span>
       </div>
       <div className="self-end text-xs text-gray-500">{createdAt}</div>
-    </div>
+    </Link>
   );
 };
 

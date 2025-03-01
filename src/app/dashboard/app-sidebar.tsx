@@ -20,6 +20,8 @@ import type { Session } from "next-auth";
 import { SIDEBAR_LINKS } from "@/lib/constant";
 import { Home } from "lucide-react";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 type AppSidebarProps = {
   session: Session;
@@ -29,6 +31,8 @@ export function AppSidebar({
   session,
   ...props
 }: React.ComponentProps<typeof Sidebar> & AppSidebarProps) {
+  const pathname = usePathname();
+
   return (
     <Sidebar variant="floating" collapsible="icon" {...props}>
       <SidebarHeader>
@@ -38,7 +42,12 @@ export function AppSidebar({
         <SidebarGroup>
           <SidebarMenu>
             <SidebarMenuButton tooltip="Home" asChild>
-              <Link href="/dashboard/home">
+              <Link
+                href="/dashboard/home"
+                className={cn(
+                  pathname === "/dashboard/home" && "bg-secondary px-4 py-5",
+                )}
+              >
                 <Home />
                 <span>Home</span>
               </Link>

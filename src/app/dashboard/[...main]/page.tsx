@@ -1,6 +1,6 @@
 import Dashboard from "../dashboard";
 
-const Main = () => {
+const Main = async () => {
   return <Dashboard />;
 };
 

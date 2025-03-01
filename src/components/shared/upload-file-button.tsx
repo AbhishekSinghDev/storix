@@ -18,12 +18,8 @@ const UploadFileButton = ({
     router.replace(`?${UPLOAD_DIALOG_STATE_KEY}=true`, { scroll: false });
   };
 
-  const handleFileUpload = () => {
-    openUploadDialog();
-  };
-
   return (
-    <Button className={cn(className)} {...props} onClick={handleFileUpload}>
+    <Button className={cn(className)} {...props} onClick={openUploadDialog}>
       <CloudUpload /> <span className={cn(textClassName)}>Upload File</span>
     </Button>
   );

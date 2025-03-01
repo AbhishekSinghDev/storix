@@ -2,6 +2,7 @@ import { Clock, Folder, Star, Trash } from "lucide-react";
 import type { MockFile, MockFolder } from "./types";
 
 export const UPLOAD_DIALOG_STATE_KEY = "file_upload";
+export const NEW_FOLDER_DIALOG_STATE_KEY = "new_folder";
 
 export const STORIX_DIR_PREFIX = "/storix";
 

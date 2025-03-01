@@ -4,32 +4,6 @@ import { TRPCError } from "@trpc/server";
 import { hashPassword } from "@/lib/password";
 
 const authRouter = createTRPCRouter({
-  createRootFolderOnOAuthSignup: protectedProcedure.mutation(
-    async ({ ctx }) => {
-      try {
-        await ctx.db.folder.create({
-          data: {
-            name: "home",
-            path: "/home",
-            userId: ctx.session.user.id,
-          },
-        });
-
-        return {
-          message: "Root folder created successfully!",
-        };
-      } catch (err) {
-        console.error(
-          "Failed to create oauth signup user default folder: ",
-          err,
-        );
-        throw new TRPCError({
-          code: "INTERNAL_SERVER_ERROR",
-          message: "Failed to create root folder for the user.",
-        });
-      }
-    },
-  ),
   register: publicProcedure
     .input(registerFormSchema)
     .mutation(async ({ ctx, input }) => {
@@ -70,7 +44,7 @@ const authRouter = createTRPCRouter({
           await tx.folder.create({
             data: {
               name: "home",
-              path: "/home",
+              path: "/",
               userId: newUser.id,
             },
           });
