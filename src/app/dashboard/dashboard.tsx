@@ -45,6 +45,7 @@ const Dashboard = async ({ folders, files }: DashboardProps) => {
                 {folders.map((item) => (
                   <FolderContainer
                     key={item.id}
+                    id={item.id}
                     name={item.name}
                     href={item.path + "/" + item.name}
                     createdAt={item.createdAt.toLocaleDateString()}

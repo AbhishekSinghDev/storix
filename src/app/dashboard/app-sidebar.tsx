@@ -22,13 +22,16 @@ import { Home } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
+import type { TRecentlyVisitedFolder } from "@/lib/prisma-extended-types";
 
 type AppSidebarProps = {
-  session: Session;
+  session?: Session;
+  recentFolders: TRecentlyVisitedFolder[];
 };
 
 export function AppSidebar({
   session,
+  recentFolders,
   ...props
 }: React.ComponentProps<typeof Sidebar> & AppSidebarProps) {
   const pathname = usePathname();
@@ -55,7 +58,7 @@ export function AppSidebar({
           </SidebarMenu>
         </SidebarGroup>
 
-        <NavMain />
+        <NavMain recentFolders={recentFolders} />
         <NavTabs projects={SIDEBAR_LINKS.tabs} />
       </SidebarContent>
       <SidebarFooter>

@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { createFolderSchema } from "@/lib/zod-schema";
 import { z } from "zod";
+import { cleanPathString } from "@/lib/functions";
 
 const dashboardRouter = createTRPCRouter({
   getRootFolder: protectedProcedure.query(async ({ ctx }) => {
@@ -26,11 +27,13 @@ const dashboardRouter = createTRPCRouter({
   getFoldersAndFilesAccordingToPath: protectedProcedure
     .input(z.object({ path: z.string().min(1) }))
     .query(async ({ ctx, input }) => {
+      const cleanPath = cleanPathString(input.path);
+
       try {
         const folders = await ctx.db.folder.findMany({
           where: {
             userId: ctx.session.user.id,
-            path: { equals: input.path },
+            path: { equals: cleanPath },
           },
           orderBy: {
             createdAt: "desc",
@@ -94,6 +97,23 @@ const dashboardRouter = createTRPCRouter({
       const { name, path, parentId } = input;
 
       try {
+        // check to prevent duplicate folder names
+        const existingFolder = await ctx.db.folder.findFirst({
+          where: {
+            name: { equals: name },
+            userId: ctx.session.user.id,
+            parentId: parentId,
+            path: { equals: path },
+          },
+        });
+
+        if (existingFolder) {
+          return {
+            warning: true,
+            message: `${name} named folder already exists.`,
+          };
+        }
+
         await ctx.db.folder.create({
           data: {
             name: name,
@@ -114,6 +134,66 @@ const dashboardRouter = createTRPCRouter({
         });
       }
     }),
+
+  addFolderToUserRecentlyViewedFolders: protectedProcedure
+    .input(z.object({ folderId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      try {
+        // Each user can have only one record per folder
+        await ctx.db.recentlyVisitedFolders.upsert({
+          where: {
+            userId_folderId: {
+              userId: ctx.session.user.id,
+              folderId: input.folderId,
+            },
+          },
+          create: {
+            userId: ctx.session.user.id,
+            folderId: input.folderId,
+          },
+          update: {
+            updatedAt: new Date(),
+          },
+        });
+
+        return true;
+      } catch (err) {
+        console.error("Failed to add folder to user history: ", err);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to add folder to user history",
+        });
+      }
+    }),
+
+  getRecentlyVisitedFolders: protectedProcedure.query(async ({ ctx }) => {
+    try {
+      const recentlyVisitedFolders =
+        await ctx.db.recentlyVisitedFolders.findMany({
+          where: {
+            userId: ctx.session.user.id,
+          },
+          select: {
+            id: true,
+            folder: {
+              select: { id: true, name: true },
+            },
+          },
+          orderBy: {
+            updatedAt: "desc",
+          },
+          take: 5,
+        });
+
+      return recentlyVisitedFolders;
+    } catch (err) {
+      console.error("Failed to fetch user recently visited folders: ", err);
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Failed to fetch user recently visited folders",
+      });
+    }
+  }),
 });
 
 export default dashboardRouter;

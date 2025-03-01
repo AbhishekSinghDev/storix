@@ -51,9 +51,10 @@ model User {
   s3Region       String?
   s3ConfiguredAt DateTime?
 
-  folders  Folder[]
-  accounts Account[]
-  sessions Session[]
+  folders                Folder[]
+  accounts               Account[]
+  sessions               Session[]
+  recentlyVisitedFolders RecentlyVisitedFolders[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -82,9 +83,10 @@ model Folder {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
 
-  files  File[]
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
+  files                  File[]
+  userId                 String
+  user                   User                     @relation(fields: [userId], references: [id])
+  recentlyVisitedFolders RecentlyVisitedFolders[]
 
   @@index([userId])
   @@index([path])
@@ -123,4 +125,17 @@ model File {
 
   @@index([folderId])
   @@index([parentPath])
+}
+
+model RecentlyVisitedFolders {
+  id       String @id @default(cuid())
+  userId   String
+  folderId String
+  user     User   @relation(fields: [userId], references: [id])
+  folder   Folder @relation(fields: [folderId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, folderId])
 }

@@ -1,5 +1,5 @@
 import { registerFormSchema } from "@/lib/zod-schema";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { hashPassword } from "@/lib/password";
 

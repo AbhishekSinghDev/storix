@@ -27,7 +27,6 @@ import LoadingButton from "./loading-button";
 import { createFolderSchema } from "@/lib/zod-schema";
 import usePath from "@/hooks/use-path";
 import type { TFolder } from "@/lib/prisma-extended-types";
-import { useEffect } from "react";
 
 type CreateFolderInput = z.infer<typeof createFolderSchema>;
 
@@ -35,7 +34,6 @@ const NewFolderDialog = ({ folder }: { folder: TFolder }) => {
   const { path } = usePath();
   const router = useRouter();
   const pathname = usePathname();
-  const trpcUtils = api.useUtils();
   const searchParams = useSearchParams();
   const isOpen = !!searchParams.get(NEW_FOLDER_DIALOG_STATE_KEY);
 
@@ -66,7 +64,12 @@ const NewFolderDialog = ({ folder }: { folder: TFolder }) => {
       },
       {
         onSuccess: (data) => {
-          void trpcUtils.dashboard.getFoldersAccordingToPath.invalidate();
+          if (data.warning) {
+            toast.warning(data.message);
+            return;
+          }
+
+          router.refresh();
           toast.success(data.message);
           handleClose();
         },

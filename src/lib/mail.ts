@@ -1,8 +1,5 @@
 import nodemailer from "nodemailer";
 import { env } from "@/env";
-import { generateOtp } from "./utils";
-import { db } from "@/server/db";
-import { sendVerificationEmail } from "./mail-template";
 
 export const transporter = nodemailer.createTransport({
   host: env.SMTP_HOST,

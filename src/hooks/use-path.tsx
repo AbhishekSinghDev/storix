@@ -1,11 +1,13 @@
 "use client";
 
+import { cleanPathString } from "@/lib/functions";
 import { usePathname } from "next/navigation";
 
 const usePath = () => {
   const pathname = usePathname();
 
-  const cleanPath = pathname?.replace(/^\/dashboard/, "") || "/";
+  const cleanPath = pathname ? cleanPathString(pathname) : "/";
+  console.log(cleanPath);
 
   return {
     path: cleanPath,

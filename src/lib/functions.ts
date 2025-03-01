@@ -67,8 +67,8 @@ export const getPrivateFileUrl = async (key: string, expiry = 10 * 60) => {
 
 import {
   FileTypeEnumForUpload,
-  FileUploadResponse,
-  UploadFile,
+  type FileUploadResponse,
+  type UploadFile,
 } from "@/lib/types";
 import { FILE_EXTENSIONS } from "@/lib/constant";
 
@@ -140,4 +140,31 @@ export const prepareFilesForUpload = (
   });
 
   return result;
+};
+
+export const cleanPathString = (path: string): string => {
+  try {
+    const decodedPath = decodeURIComponent(path);
+    const withoutPrefix = decodedPath.replace(/^\/dashboard/, "");
+    const normalizedSlashes = withoutPrefix.replace(/\/+/g, "/");
+    const withoutTrailingSlash = normalizedSlashes.replace(/(.+)\/$/, "$1");
+
+    if (!withoutTrailingSlash) return "/";
+
+    const cleanSegments = withoutTrailingSlash
+      .replaceAll(" ", "")
+      .split("/")
+      .map((segment) =>
+        segment
+          .replace(/[<>:"|?*]/g, "-")
+          .replace(/\s+/g, " ")
+          .trim(),
+      )
+      .filter(Boolean);
+
+    return cleanSegments.length ? "/" + cleanSegments.join("/") : "/";
+  } catch (error) {
+    console.error("Path cleaning error:", error);
+    return "/";
+  }
 };

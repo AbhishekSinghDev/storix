@@ -1,22 +1,28 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { api } from "@/trpc/react";
 import { Folder } from "lucide-react";
 import Link, { type LinkProps } from "next/link";
 
 type FolderContainerProps = LinkProps & {
+  id: string;
   name: string;
   className?: string;
   createdAt: string;
 };
 
 const FolderContainer = ({
+  id,
   name,
   href,
   createdAt,
   className,
   ...props
 }: FolderContainerProps) => {
+  const { mutate: addToHistory } =
+    api.dashboard.addFolderToUserRecentlyViewedFolders.useMutation();
+
   const fullPath =
     typeof href === "string"
       ? `/dashboard${href}`
@@ -25,9 +31,14 @@ const FolderContainer = ({
           ...href,
         };
 
+  const handleAddToUserHistory = () => {
+    addToHistory({ folderId: id });
+  };
+
   return (
     <Link
       href={fullPath}
+      onClick={handleAddToUserHistory}
       className={cn(
         "group flex cursor-pointer flex-col rounded-lg border p-4 transition-colors hover:bg-secondary",
         className,

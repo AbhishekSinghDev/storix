@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, Folder } from "lucide-react";
+import { ChevronRight, Folder, History } from "lucide-react";
 
 import {
   SidebarGroup,
@@ -8,20 +8,40 @@ import {
   SidebarMenu,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
-import { MOCK_FOLDERS } from "@/lib/constant";
+import type { TRecentlyVisitedFolder } from "@/lib/prisma-extended-types";
 
-export function NavMain() {
+type NavMainProps = {
+  recentFolders: TRecentlyVisitedFolder[];
+};
+
+export function NavMain({ recentFolders }: NavMainProps) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Recently Visited Folders</SidebarGroupLabel>
+      {recentFolders.length > 0 ? (
+        <SidebarGroupLabel>Recently Visited Folders</SidebarGroupLabel>
+      ) : null}
       <SidebarMenu>
-        {MOCK_FOLDERS.map((folder) => (
-          <SidebarMenuButton tooltip={folder.name} key={folder.id}>
-            <Folder />
-            <span>{folder.name}</span>
-            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-          </SidebarMenuButton>
-        ))}
+        {recentFolders.length > 0 ? (
+          recentFolders.map((folder) => (
+            <SidebarMenuButton tooltip={folder.folder.name} key={folder.id}>
+              <Folder className="shrink-0" />
+              <span>{folder.folder.name}</span>
+              <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+            </SidebarMenuButton>
+          ))
+        ) : (
+          <div className="flex flex-col items-center justify-center gap-2 px-4 py-6 text-center">
+            <History className="h-8 w-8 text-muted-foreground/50" />
+            <div className="space-y-1">
+              <p className="text-sm font-medium text-muted-foreground">
+                No recent folders
+              </p>
+              <p className="text-xs text-muted-foreground/70">
+                Folders you visit will appear here
+              </p>
+            </div>
+          </div>
+        )}
       </SidebarMenu>
     </SidebarGroup>
   );

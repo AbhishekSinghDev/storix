@@ -16,9 +16,8 @@ import NewFolderDialog from "@/components/shared/new-folder-dialog";
 
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth();
-
   if (!session?.user) {
-    redirect("/");
+    redirect("/signin");
   }
 
   const config = await api.user.isS3Configured();
@@ -31,10 +30,12 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
     redirect("/signin");
   }
 
+  const recentFolders = await api.dashboard.getRecentlyVisitedFolders();
+
   return (
     <>
       <SidebarProvider>
-        <AppSidebar session={session} />
+        <AppSidebar session={session} recentFolders={recentFolders} />
         <SidebarInset>
           <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
             <div className="flex flex-1 items-center gap-2 px-4">
