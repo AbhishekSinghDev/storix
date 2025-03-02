@@ -46,9 +46,13 @@ model User {
   image          String    @default("default-user-icon.webp")
   storageUsed    String    @default("0")
   s3AccessKey    String?
+  s3AccessKeyIv  String?
   s3SecretKey    String?
+  s3SecretKeyIv  String?
   s3Bucket       String?
+  s3BucketIv     String?
   s3Region       String?
+  s3RegionIv     String?
   s3ConfiguredAt DateTime?
 
   folders                Folder[]

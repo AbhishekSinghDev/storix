@@ -24,6 +24,7 @@ export const env = createEnv({
     SMTP_PASS: z.string(),
     SMTP_HOST: z.string(),
     SMTP_PORT: z.string(),
+    ENCRYPTION_KEY: z.string().min(10),
   },
 
   client: {
@@ -47,6 +48,7 @@ export const env = createEnv({
     SMTP_PASS: process.env.SMTP_PASS,
     SMTP_HOST: process.env.SMTP_HOST,
     SMTP_PORT: process.env.SMTP_PORT,
+    ENCRYPTION_KEY: process.env.ENCRYPTION_KEY,
   },
   skipValidation: !!process.env.SKIP_ENV_VALIDATION,
   emptyStringAsUndefined: true,

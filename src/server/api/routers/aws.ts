@@ -1,56 +1,126 @@
-/* eslint-disable  @typescript-eslint/await-thenable*/
-
-import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-
+import { S3Service } from "../service/s3service";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import {
-  getPresignedUrl,
-  getPrivateFileUrl,
-  getPublicFileUrl,
-} from "@/lib/functions";
-import { STORIX_DIR_PREFIX } from "@/lib/constant";
 
-export const awsRouter = createTRPCRouter({
-  getPresignedUrl: protectedProcedure
+const awsRouter = createTRPCRouter({
+  // Get a presigned URL for direct upload (small files)
+  getUploadUrl: protectedProcedure
     .input(
       z.object({
-        fileName: z.string(),
+        filename: z.string(),
         contentType: z.string(),
-        publicAvailable: z.boolean().optional().nullable(),
+        path: z.string().default(""),
       }),
     )
-    .mutation(async ({ input }) => {
-      const { fileName, contentType, publicAvailable } = input;
-      const key = STORIX_DIR_PREFIX + "/admin/" + fileName;
-      const { url } = await getPresignedUrl(
+    .mutation(async ({ ctx, input }) => {
+      const s3Service = new S3Service();
+      const userId = ctx.session.user.id;
+      const { filename, contentType, path } = input;
+
+      const key = path ? `${path}/${filename}` : filename;
+
+      return {
+        url: await s3Service.getPresignedUploadUrl(userId, key, contentType),
         key,
-        contentType,
-        publicAvailable ?? false,
+      };
+    }),
+
+  // Initiate multipart upload (large files)
+  initiateMultipartUpload: protectedProcedure
+    .input(
+      z.object({
+        filename: z.string(),
+        contentType: z.string(),
+        path: z.string().default(""),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const s3Service = new S3Service();
+      const userId = ctx.session.user.id;
+      const { filename, contentType, path } = input;
+
+      const key = path ? `${path}/${filename}` : filename;
+
+      return s3Service.initiateMultipartUpload(userId, key, contentType);
+    }),
+
+  // Get URL to upload a part
+  getPartUploadUrl: protectedProcedure
+    .input(
+      z.object({
+        key: z.string(),
+        uploadId: z.string(),
+        partNumber: z.number().int().positive(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const s3Service = new S3Service();
+      const userId = ctx.session.user.id;
+
+      return {
+        url: await s3Service.getPartUploadUrl(
+          userId,
+          input.key,
+          input.uploadId,
+          input.partNumber,
+        ),
+        partNumber: input.partNumber,
+      };
+    }),
+
+  // Complete multipart upload
+  completeMultipartUpload: protectedProcedure
+    .input(
+      z.object({
+        key: z.string(),
+        uploadId: z.string(),
+        parts: z.array(
+          z.object({
+            ETag: z.string(),
+            PartNumber: z.number(),
+          }),
+        ),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const s3Service = new S3Service();
+      const userId = ctx.session.user.id;
+
+      await s3Service.completeMultipartUpload(
+        userId,
+        input.key,
+        input.uploadId,
+        input.parts,
       );
-      return { url, key };
+
+      // Record the file in your database if needed
+      return { success: true, key: input.key };
     }),
 
-  getPublicFileUrl: protectedProcedure
-    .input(z.object({ fileKey: z.string() }))
-    .mutation(async ({ input }) => {
-      const { fileKey } = input;
-      //
-      return await getPublicFileUrl(fileKey);
-    }),
+  // List files/folders
+  listFiles: protectedProcedure
+    .input(
+      z.object({
+        path: z.string().default(""),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const s3Service = new S3Service();
+      const userId = ctx.session.user.id;
 
-  getPrivateFileUrl: protectedProcedure
-    .input(z.object({ fileKey: z.string(), expiry: z.number() }))
-    .mutation(async ({ input }) => {
-      const { fileKey, expiry } = input;
-      const resp = await getPrivateFileUrl(fileKey, expiry);
-      if (resp?.error) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Unauthorized",
-        });
-      }
+      const response = await s3Service.listFiles(userId, input.path);
 
-      return resp;
+      // Process the response to create a folder-like structure
+      const files =
+        response.Contents?.map((item) => ({
+          key: item.Key ?? "",
+          size: item.Size ?? 0,
+          lastModified: item.LastModified,
+          isFolder: item.Key?.endsWith("/") ?? false,
+        })) ?? [];
+
+      return files;
     }),
 });
+
+export default awsRouter;

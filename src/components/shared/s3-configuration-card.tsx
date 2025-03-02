@@ -52,6 +52,8 @@ const S3ConfigurationCard = () => {
   });
 
   const onSubmit = (values: z.infer<typeof bucketConfigurationSchema>) => {
+    console.log("values: ", values);
+
     configureS3(values, {
       onSuccess: (opts) => {
         router.push("/dashboard/home");

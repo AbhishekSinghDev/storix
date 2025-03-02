@@ -7,7 +7,6 @@ const usePath = () => {
   const pathname = usePathname();
 
   const cleanPath = pathname ? cleanPathString(pathname) : "/";
-  console.log(cleanPath);
 
   return {
     path: cleanPath,

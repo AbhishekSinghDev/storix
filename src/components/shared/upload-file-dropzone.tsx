@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -21,12 +21,10 @@ import { toast } from "sonner";
 import { ACCEPTED_MIME_TYPES, MAX_FILE_SIZE } from "@/lib/constant";
 import { cn } from "@/lib/utils";
 import { FileTypeEnumForUpload, type UploadFile } from "@/lib/types";
-import {
-  formatFileSize,
-  getFileTypeFromExtension,
-  prepareFilesForUpload,
-} from "@/lib/functions";
+import { formatFileSize, getFileTypeFromExtension } from "@/lib/functions";
 import Image from "next/image";
+import { api } from "@/trpc/react";
+import LoadingButton from "./loading-button";
 
 const getFileIcon = (type: FileTypeEnumForUpload) => {
   switch (type) {
@@ -47,6 +45,8 @@ const getFileIcon = (type: FileTypeEnumForUpload) => {
   }
 };
 
+const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks
+
 type UploadFileDropZoneProps = {
   onClose?: () => void;
   className?: string;
@@ -58,6 +58,12 @@ const UploadFileDropZone = ({
 }: UploadFileDropZoneProps) => {
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const abortControllerRef = useRef<Record<string, AbortController>>({});
+
+  const getUploadUrl = api.aws.getUploadUrl.useMutation();
+  const initiateMultipart = api.aws.initiateMultipartUpload.useMutation();
+  const getPartUrl = api.aws.getPartUploadUrl.useMutation();
+  const completeMultipart = api.aws.completeMultipartUpload.useMutation();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const newFiles = acceptedFiles.map((file) => ({
@@ -95,11 +101,163 @@ const UploadFileDropZone = ({
     });
   };
 
+  const uploadFile = useCallback(async (file: File) => {
+    try {
+      // Create abort controller for this upload
+      const controller = new AbortController();
+      abortControllerRef.current[file.name] = controller;
+
+      if (file.size <= CHUNK_SIZE) {
+        await handleSimpleUpload(file, controller.signal);
+      } else {
+        await handleMultipartUpload(file, controller.signal);
+      }
+    } catch (error) {
+      console.error("Upload failed:", error);
+      setUploadFiles((prev) =>
+        prev.map((u) =>
+          u.file.name === file.name
+            ? {
+                ...u,
+                status: "error" as const,
+                error: (error as Error).message,
+              }
+            : u,
+        ),
+      );
+    }
+  }, []);
+
+  const handleSimpleUpload = async (file: File, signal: AbortSignal) => {
+    // Get presigned URL from your backend
+    const { url, key } = await getUploadUrl.mutateAsync({
+      filename: file.name,
+      contentType: file.type,
+    });
+
+    // Upload directly to S3
+    const response = await fetch(url, {
+      method: "PUT",
+      body: file,
+      headers: {
+        "Content-Type": file.type,
+      },
+      signal,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Upload failed: ${response.statusText}`);
+    }
+
+    // Update file status
+    setUploadFiles((prev) =>
+      prev.map((u) =>
+        u.file.name === file.name
+          ? { ...u, progress: 100, status: "success" as const }
+          : u,
+      ),
+    );
+  };
+
+  const handleMultipartUpload = async (file: File, signal: AbortSignal) => {
+    // 1. Initiate multipart upload
+    const { uploadId, key } = await initiateMultipart.mutateAsync({
+      filename: file.name,
+      contentType: file.type,
+    });
+
+    // 2. Split file into chunks
+    const chunks = Math.ceil(file.size / CHUNK_SIZE);
+    const parts: { ETag: string; PartNumber: number }[] = [];
+
+    for (let partNumber = 1; partNumber <= chunks; partNumber++) {
+      if (signal.aborted) {
+        throw new Error("Upload aborted");
+      }
+
+      const start = (partNumber - 1) * CHUNK_SIZE;
+      const end = Math.min(partNumber * CHUNK_SIZE, file.size);
+      const chunk = file.slice(start, end);
+
+      if (!uploadId) {
+        return;
+      }
+
+      // Get signed URL for this part
+      const { url } = await getPartUrl.mutateAsync({
+        key,
+        uploadId,
+        partNumber,
+      });
+
+      // Upload part
+      const response = await fetch(url, {
+        method: "PUT",
+        body: chunk,
+        signal,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to upload part ${partNumber}`);
+      }
+
+      const ETag = response.headers.get("ETag")?.replace(/"/g, "") ?? "";
+      parts.push({ ETag, PartNumber: partNumber });
+
+      // Update progress
+      const progress = Math.round((partNumber / chunks) * 100);
+      setUploadFiles((prev) =>
+        prev.map((u) => (u.file.name === file.name ? { ...u, progress } : u)),
+      );
+    }
+
+    if (!uploadId) {
+      console.error("Upload Id not found in multipart upload func.");
+      return;
+    }
+
+    // 3. Complete multipart upload
+    await completeMultipart.mutateAsync({
+      key,
+      uploadId,
+      parts,
+    });
+
+    // Mark as completed
+    setUploadFiles((prev) =>
+      prev.map((u) =>
+        u.file.name === file.name
+          ? { ...u, progress: 100, status: "success" as const }
+          : u,
+      ),
+    );
+  };
+
+  const cancelUpload = (filename: string) => {
+    const controller = abortControllerRef.current[filename];
+    if (controller) {
+      controller.abort();
+      delete abortControllerRef.current[filename];
+    }
+
+    setUploadFiles((prev) =>
+      prev.map((u) =>
+        u.file.name === filename
+          ? { ...u, status: "error" as const, error: "Upload cancelled" }
+          : u,
+      ),
+    );
+  };
+
   const handleUpload = async () => {
     setIsUploading(true);
     try {
-      const filesByType = prepareFilesForUpload(uploadFiles);
-      console.log("Files ready for upload:", filesByType);
+      // Upload each file
+      await Promise.all(
+        uploadFiles
+          .filter((f) => f.status === "queued")
+          .map((f) => uploadFile(f.file)),
+      );
 
       toast.success("Files uploaded successfully!");
       if (onClose) onClose();
@@ -242,15 +400,19 @@ const UploadFileDropZone = ({
               Cancel
             </Button>
           )}
-          <Button
-            onClick={handleUpload}
-            disabled={
-              uploadFiles.length === 0 ||
-              uploadFiles.every((f) => f.status === "success")
-            }
-          >
-            Upload Files
-          </Button>
+          {isUploading ? (
+            <LoadingButton text="Uploading Files..." />
+          ) : (
+            <Button
+              onClick={handleUpload}
+              disabled={
+                uploadFiles.length === 0 ||
+                uploadFiles.every((f) => f.status === "success")
+              }
+            >
+              Upload Files
+            </Button>
+          )}
         </div>
       </div>
     </div>

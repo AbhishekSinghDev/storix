@@ -29,3 +29,4 @@ Note:
 
 ## Day 5
   [^]: Make sidebar elements dynamic.
+  [^]: Secure the s3 credentials taken from the user.

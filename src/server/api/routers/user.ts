@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { bucketConfigurationSchema } from "@/lib/zod-schema";
+import { encryptCredential } from "@/lib/s3";
 
 const userRouter = createTRPCRouter({
   configureS3: protectedProcedure
@@ -8,16 +9,25 @@ const userRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { s3AccessKey, s3BucketKey, s3Region, s3SecretKey } = input;
 
+      const encryptedAccessKey = encryptCredential(s3AccessKey);
+      const encryptedSecretKey = encryptCredential(s3SecretKey);
+      const encryptedBucketName = encryptCredential(s3BucketKey);
+      const encryptedRegionName = encryptCredential(s3Region);
+
       try {
         await ctx.db.user.update({
           where: {
             id: ctx.session.user.id,
           },
           data: {
-            s3AccessKey: s3AccessKey,
-            s3Bucket: s3BucketKey,
-            s3Region: s3Region,
-            s3SecretKey: s3SecretKey,
+            s3AccessKey: encryptedAccessKey.encryptedData,
+            s3AccessKeyIv: encryptedAccessKey.iv,
+            s3Bucket: encryptedBucketName.encryptedData,
+            s3BucketIv: encryptedBucketName.iv,
+            s3Region: encryptedRegionName.encryptedData,
+            s3RegionIv: encryptedRegionName.iv,
+            s3SecretKey: encryptedSecretKey.encryptedData,
+            s3SecretKeyIv: encryptedSecretKey.iv,
             s3ConfiguredAt: new Date(),
           },
         });
