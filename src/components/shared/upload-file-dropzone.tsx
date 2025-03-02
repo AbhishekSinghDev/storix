@@ -95,40 +95,11 @@ const UploadFileDropZone = ({
     });
   };
 
-  const simulateUpload = async (id: string) => {
-    setUploadFiles((prev) =>
-      prev.map((f) => (f.id === id ? { ...f, status: "uploading" } : f)),
-    );
-
-    try {
-      for (let progress = 0; progress <= 100; progress += 10) {
-        await new Promise((resolve) => setTimeout(resolve, 200));
-        setUploadFiles((prev) =>
-          prev.map((f) => (f.id === id ? { ...f, progress } : f)),
-        );
-      }
-
-      setUploadFiles((prev) =>
-        prev.map((f) => (f.id === id ? { ...f, status: "success" } : f)),
-      );
-    } catch (error) {
-      setUploadFiles((prev) =>
-        prev.map((f) =>
-          f.id === id ? { ...f, status: "error", error: "Upload failed" } : f,
-        ),
-      );
-    }
-  };
-
   const handleUpload = async () => {
     setIsUploading(true);
     try {
       const filesByType = prepareFilesForUpload(uploadFiles);
       console.log("Files ready for upload:", filesByType);
-
-      for (const file of uploadFiles.filter((f) => f.status === "queued")) {
-        await simulateUpload(file.id);
-      }
 
       toast.success("Files uploaded successfully!");
       if (onClose) onClose();
@@ -219,7 +190,6 @@ const UploadFileDropZone = ({
                         variant="ghost"
                         size="icon"
                         className="h-8 w-8 text-yellow-500"
-                        onClick={() => simulateUpload(id)}
                       >
                         <RefreshCw className="h-4 w-4" />
                       </Button>

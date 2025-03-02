@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -12,14 +12,13 @@ import { UPLOAD_DIALOG_STATE_KEY } from "@/lib/constant";
 import UploadFileDropZone from "./upload-file-dropzone";
 
 const UploadFileDialog = () => {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const isOpen = !!searchParams.get(UPLOAD_DIALOG_STATE_KEY);
 
   const handleClose = () => {
-    const params = new URLSearchParams(searchParams);
-    params.delete(UPLOAD_DIALOG_STATE_KEY);
-    router.replace(`?${params.toString()}`, { scroll: false });
+    const url = new URL(window.location.href);
+    url.searchParams.delete(UPLOAD_DIALOG_STATE_KEY);
+    history.pushState({}, "", url.toString());
   };
 
   return (

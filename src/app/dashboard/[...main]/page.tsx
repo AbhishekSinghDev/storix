@@ -5,9 +5,10 @@ import { api } from "@/trpc/server";
 const Main = async () => {
   const headersList = await headers();
   const pathname = headersList.get("x-current-path");
+  const path = pathname?.replace(/^\/dashboard/, "") ?? "/home";
 
   const data = await api.dashboard.getFoldersAndFilesAccordingToPath({
-    path: pathname?.replace(/^\/dashboard/, "") ?? "/home",
+    path: path,
   });
 
   return <Dashboard folders={data.folders} files={data.files} />;

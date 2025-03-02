@@ -49,9 +49,9 @@ const NewFolderDialog = ({ folder }: { folder: TFolder }) => {
   });
 
   const handleClose = () => {
-    const params = new URLSearchParams(searchParams);
-    params.delete(NEW_FOLDER_DIALOG_STATE_KEY);
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    const url = new URL(window.location.href);
+    url.searchParams.delete(NEW_FOLDER_DIALOG_STATE_KEY);
+    history.pushState({}, "", `${pathname}?${url.searchParams.toString()}`);
     form.reset();
   };
 

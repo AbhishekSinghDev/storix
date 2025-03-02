@@ -4,7 +4,6 @@ import { FolderPlus } from "lucide-react";
 import { Button } from "../ui/button";
 import type { ButtonProps } from "../ui/button";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import { NEW_FOLDER_DIALOG_STATE_KEY } from "@/lib/constant";
 
 const NewFolderButton = ({
@@ -12,10 +11,10 @@ const NewFolderButton = ({
   textClassName,
   ...props
 }: ButtonProps & { textClassName?: string }) => {
-  const router = useRouter();
-
   const openNewFolderDialog = () => {
-    router.replace(`?${NEW_FOLDER_DIALOG_STATE_KEY}=true`, { scroll: false });
+    const url = new URL(window.location.href);
+    url.searchParams.set(NEW_FOLDER_DIALOG_STATE_KEY, "true");
+    history.pushState({}, "", url.toString());
   };
 
   return (
