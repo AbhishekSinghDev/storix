@@ -55,7 +55,7 @@ export class S3Service {
     }
 
     const accessKeyId = decryptCredential(s3AccessKey, s3AccessKeyIv);
-    const secretAccessKey = decryptCredential(s3AccessKey, s3AccessKeyIv);
+    const secretAccessKey = decryptCredential(s3SecretKey, s3SecretKeyIv);
     const region = decryptCredential(s3Region, s3RegionIv);
 
     return new S3Client({

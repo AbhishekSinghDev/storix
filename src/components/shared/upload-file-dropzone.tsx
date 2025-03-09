@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import { useCallback, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { motion, AnimatePresence } from "framer-motion";
@@ -129,25 +130,37 @@ const UploadFileDropZone = ({
   }, []);
 
   const handleSimpleUpload = async (file: File, signal: AbortSignal) => {
-    // Get presigned URL from your backend
     const { url, key } = await getUploadUrl.mutateAsync({
       filename: file.name,
       contentType: file.type,
     });
 
-    // Upload directly to S3
-    const response = await fetch(url, {
-      method: "PUT",
-      body: file,
-      headers: {
-        "Content-Type": file.type,
-      },
-      signal,
-    });
+    console.log("simple upload url: ", url);
 
-    if (!response.ok) {
+    // Upload directly to S3
+    // const response = await fetch(url, {
+    //   method: "PUT",
+    //   body: file,
+    //   headers: {
+    //     "Content-Type": file.type,
+    //   },
+    //   signal,
+    // });
+
+    const response = await axios.put(url, file);
+
+    // const body = await response.json();
+
+    console.log("simple upload response: ", response);
+    console.log("simple upload response body: ", response.data);
+
+    if (response.status !== 200) {
       throw new Error(`Upload failed: ${response.statusText}`);
     }
+
+    // this file url is just for testing right now. will be dynamic in future.
+    const fileUrl = `https://storix-test.s3.ap-south-1.amazonaws.com/${key}`;
+    console.log(fileUrl);
 
     // Update file status
     setUploadFiles((prev) =>

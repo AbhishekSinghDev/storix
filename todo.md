@@ -24,9 +24,11 @@ Note:
   [^]: Add aws router for getting presigend url and private url thing.
   [*]: Add react-dropzone for better user experience drag and drop files and also support for multiple files at a time.
   [*]: Make Dashboard ui dynamic.
-  [^]: Once drag-n-drop thing is done perfectly and everything settedup successfully, then try to chunk the individual file based on there file size and console.log them
+  [*]: Once drag-n-drop thing is done perfectly and everything settedup successfully, then try to chunk the individual file based on there file size and console.log them
       once aws setup is ready then complete the aws setup.
 
 ## Day 5
-  [^]: Make sidebar elements dynamic.
-  [^]: Secure the s3 credentials taken from the user.
+  [*]: Make sidebar elements dynamic.
+  [*]: Secure the s3 credentials taken from the user.
+
+I am kinda busy nowadays i will continue the project after sometime. :(

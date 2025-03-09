@@ -18,6 +18,15 @@ const Dashboard = async ({ folders, files }: DashboardProps) => {
 
   return (
     <div className="w-full">
+      {/* this was just for testing purpose i will remove it later */}
+      {/* <img
+        src="https://storix-test.s3.ap-south-1.amazonaws.com/github-svgrepo-com.svg"
+        alt="github"
+        height={100}
+        width={100}
+        className="size-[200px]"
+      /> */}
+
       {/* Grid Header */}
       <div className="mb-4 rounded-lg p-4">
         <div className="hidden items-center justify-between lg:flex">
