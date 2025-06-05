@@ -2,6 +2,9 @@
   "extends": "@repo/typescript-config/start.json",
   "include": ["**/*.ts", "**/*.tsx"],
   "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "target": "esnext",
     "strict": true,
     "baseUrl": "."
   }
