@@ -1,5 +1,5 @@
 {
-  "extends": "@repo/tsconfig/base.json",
+  "extends": "@storix/tsconfig/base.json",
   "include": ["."],
   "exclude": ["node_modules"]
 }

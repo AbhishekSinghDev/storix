@@ -1,5 +1,5 @@
 {
-  "extends": "@repo/typescript-config/start.json",
+  "extends": "@storix/typescript-config/start.json",
   "include": ["**/*.ts", "**/*.tsx"],
   "compilerOptions": {
     "module": "esnext",
