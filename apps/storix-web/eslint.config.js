@@ -1,4 +1,4 @@
 import baseConfig from "@storix/eslint-config/base";
-import reactInternalConfig from "@storix/eslint-config/react-internal";
+import config from "@storix/eslint-config/react";
 
-export default [...baseConfig, ...reactInternalConfig];
+export default [...baseConfig, ...config];

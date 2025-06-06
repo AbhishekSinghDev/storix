@@ -1,7 +1,8 @@
 import * as React from "react";
-import { Link, createFileRoute } from "@tanstack/react-router";
-import { z } from "zod";
 import { useQuery } from "@tanstack/react-query";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { z } from "zod/v4";
+
 import { trpc } from "../router";
 import { Spinner } from "./-components/spinner";
 
@@ -41,12 +42,12 @@ function DashboardPostsPostIdComponent() {
   }
 
   return (
-    <div className="p-2 space-y-2" key={post.id}>
+    <div className="space-y-2 p-2" key={post.id}>
       <div className="space-y-2">
-        <h2 className="font-bold text-lg">
+        <h2 className="text-lg font-bold">
           <input
             defaultValue={post.id}
-            className="border border-opacity-50 rounded p-2 w-full"
+            className="w-full rounded border border-opacity-50 p-2"
             disabled
           />
         </h2>
@@ -54,7 +55,7 @@ function DashboardPostsPostIdComponent() {
           <textarea
             defaultValue={post.title}
             rows={6}
-            className="border border-opacity-50 p-2 rounded w-full"
+            className="w-full rounded border border-opacity-50 p-2"
             disabled
           />
         </div>
@@ -79,10 +80,10 @@ function DashboardPostsPostIdComponent() {
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={5}
-                className="shadow w-full p-2 rounded"
+                className="w-full rounded p-2 shadow"
                 placeholder="Write some notes here..."
               />
-              <div className="italic text-xs">
+              <div className="text-xs italic">
                 Notes are stored in the URL. Try copying the URL into a new tab!
               </div>
             </div>

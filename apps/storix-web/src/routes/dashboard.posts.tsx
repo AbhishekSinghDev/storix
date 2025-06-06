@@ -1,12 +1,4 @@
-import * as React from "react";
-import {
-  Link,
-  MatchRoute,
-  Outlet,
-  createFileRoute,
-} from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { trpc } from "../router";
+import { Outlet, createFileRoute } from "@tanstack/react-router";
 import { Spinner } from "./-components/spinner";
 
 export const Route = createFileRoute("/dashboard/posts")({
@@ -20,14 +12,14 @@ export const Route = createFileRoute("/dashboard/posts")({
 });
 
 function DashboardPostsComponent() {
-  const postsQuery = useQuery(trpc.posts.queryOptions());
+  //   const postsQuery = useQuery(trpc.posts.queryOptions());
 
-  const posts = postsQuery.data || [];
+  //   const posts = postsQuery.data || [];
 
   return (
     <div className="flex-1 flex">
       <div className="divide-y w-48">
-        {posts.map((post) => {
+        {/* {posts.map((post) => {
           return (
             <div key={post.id}>
               <Link
@@ -54,7 +46,7 @@ function DashboardPostsComponent() {
               </Link>
             </div>
           );
-        })}
+        })} */}
       </div>
       <div className="flex-1 border-l border-gray-200">
         <Outlet />

@@ -1,5 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { createFileRoute } from "@tanstack/react-router";
+
 import { trpc } from "../router";
 
 export const Route = createFileRoute("/dashboard/")({
@@ -12,7 +13,6 @@ export const Route = createFileRoute("/dashboard/")({
 
 function DashboardIndexComponent() {
   const postsQuery = useQuery(trpc.posts.queryOptions());
-
   const posts = postsQuery.data || [];
 
   return (
