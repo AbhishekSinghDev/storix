@@ -4,8 +4,9 @@ import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
 
 import type { AppRouter } from "../trpc-server.handler";
-import { Spinner } from "./routes/-components/spinner";
 // Import the generated route tree
+import { ThemeProvider } from "./-components/providers/theme-provider";
+import { Spinner } from "./routes/-components/spinner";
 import { routeTree } from "./routeTree.gen";
 
 export const queryClient = new QueryClient();
@@ -41,7 +42,9 @@ export function createRouter() {
     Wrap: function WrapComponent({ children }) {
       return (
         <QueryClientProvider client={queryClient}>
-          {children}
+          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+            {children}
+          </ThemeProvider>
         </QueryClientProvider>
       );
     },
