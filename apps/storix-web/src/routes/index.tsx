@@ -1,5 +1,6 @@
-import * as React from "react";
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+
+import { env } from "~/env";
 
 export const Route = createFileRoute("/")({
   component: IndexComponent,
@@ -15,12 +16,14 @@ function IndexComponent() {
         params={{
           postId: "3",
         }}
-        className={`py-1 px-2 text-xs bg-blue-500 text-white rounded-full`}
+        className={`rounded-full bg-blue-500 px-2 py-1 text-xs text-white`}
       >
-        1 New Invoice
+        2 New Invoice
       </Link>
       <hr className={`my-2`} />
       <div className={`max-w-xl`}>
+        {/* {JSON.stringify(env, null, 2)}
+         */}
         As you navigate around take note of the UX. It should feel
         suspense-like, where routes are only rendered once all of their data and
         elements are ready.
@@ -31,6 +34,7 @@ function IndexComponent() {
         The last 2 sliders determine if link-hover preloading is enabled (and
         how long those preloads stick around) and also whether to cache rendered
         route data (and for how long). Both of these default to 0 (or off).
+        {env.VITE_PUBLIC_NAME}
       </div>
     </div>
   );

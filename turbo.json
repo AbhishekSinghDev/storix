@@ -7,7 +7,7 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".cache/tsbuildinfo.json", "dist/**"]
+      "outputs": [".cache/tsbuildinfo.json", "dist/**", ".output/**"]
     },
     "dev": {
       "dependsOn": ["^dev"],
@@ -45,7 +45,7 @@
       "interactive": true
     }
   },
-  "globalEnv": ["DATABASE_URL"],
+  "globalEnv": ["DATABASE_URL", "PUBLIC_NAME"],
   "globalPassThroughEnv": [
     "NODE_ENV",
     "CI",
