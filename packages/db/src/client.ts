@@ -1,7 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/vercel-postgres";
 
-import * as schema from "./schema";
+import * as schema from "./schema.js";
 
 const dbUrl = process.env.DATABASE_URL;
 

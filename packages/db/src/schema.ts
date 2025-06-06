@@ -11,4 +11,4 @@ export const Post = pgTable("post", (t) => ({
     .$onUpdateFn(() => sql`now()`),
 }));
 
-export * from "./auth-schema";
+export * from "./auth-schema.js";
