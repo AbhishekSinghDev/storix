@@ -6,20 +6,35 @@
   "type": "module",
   "scripts": {
     "build": "vinxi build",
-    "check-types": "tsc --noEmit",
-    "dev": "vinxi dev",
-    "lint": "next lint --max-warnings 0",
-    "start": "vinxi start"
+    "clean": "git clean -xdf .cache .turbo node_modules",
+    "dev": "bun with-env vinxi dev",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
+    "start": "vinxi start",
+    "typecheck": "tsc --noEmit",
+    "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
     "@storix/ui": "*",
-    "@tanstack/react-router": "^1.120.15",
-    "@tanstack/react-router-devtools": "^1.120.15",
+    "@t3-oss/env-core": "^0.13.6",
+    "@tanstack/react-query": "^5.80.6",
+    "@tanstack/react-query-devtools": "^5.80.6",
+    "@tanstack/react-router": "^1.120.16",
+    "@tanstack/react-router-devtools": "^1.120.16",
     "@tanstack/react-start": "^1.120.15",
+    "@tanstack/router-plugin": "^1.120.16",
+    "@trpc/client": "11.0.0-rc.772",
+    "@trpc/server": "11.0.0-rc.772",
+    "@trpc/tanstack-react-query": "11.0.0-rc.772",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "redaxios": "^0.5.1",
     "tailwind-merge": "^2.6.0",
-    "vinxi": "0.5.3"
+    "tailwindcss": "^3.4.17",
+    "vinxi": "0.5.3",
+    "zod": "^3.25.51"
   },
   "devDependencies": {
     "@storix/eslint-config": "*",
@@ -28,8 +43,7 @@
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "autoprefixer": "^10.4.20",
-    "postcss": "^8.5.1",
-    "tailwindcss": "^3.4.17",
+    "eslint": "^9.28.0",
     "typescript": "^5.8.2",
     "vite-tsconfig-paths": "^5.1.4"
   }

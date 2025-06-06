@@ -1,11 +1,14 @@
 {
   "extends": "@storix/typescript-config/start.json",
-  "include": ["**/*.ts", "**/*.tsx"],
+  "include": ["**/*.ts", "**/*.tsx", "app.config.js"],
   "compilerOptions": {
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "target": "esnext",
     "strict": true,
+    "esModuleInterop": true,
+    "jsx": "react-jsx",
+    "target": "ESNext",
+    "moduleResolution": "Bundler",
+    "skipLibCheck": true,
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "baseUrl": "."
   }
 }
