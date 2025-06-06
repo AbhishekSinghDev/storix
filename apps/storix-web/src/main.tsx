@@ -1,9 +1,10 @@
 /// <reference types="vinxi/types/client" />
 
 import React from "react";
-import ReactDOM from "react-dom/client";
 import { RouterProvider } from "@tanstack/react-router";
+import ReactDOM from "react-dom/client";
 
+import "./env";
 import "./styles.css";
 
 import { createRouter } from "./router";
@@ -17,6 +18,6 @@ if (!rootElement.innerHTML) {
   root.render(
     <React.StrictMode>
       <RouterProvider router={router} />
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 }

@@ -5,15 +5,16 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "vinxi build",
+    "build": "with-env vinxi build",
     "clean": "git clean -xdf .cache .turbo node_modules",
-    "dev": "bun with-env vinxi dev",
+    "dev": "bun with-env  vinxi dev",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
     "start": "vinxi start",
     "typecheck": "tsc --noEmit",
-    "with-env": "dotenv -e ../../.env --"
+    "with-env": "dotenv -e  ../../.env  --"
   },
+  "prettier": "@storix/prettier-config",
   "dependencies": {
     "@storix/ui": "*",
     "@t3-oss/env-core": "^0.13.6",
@@ -43,6 +44,7 @@
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "autoprefixer": "^10.4.20",
+    "dotenv-cli": "^8.0.0",
     "eslint": "^9.28.0",
     "typescript": "^5.8.2",
     "vite-tsconfig-paths": "^5.1.4"
