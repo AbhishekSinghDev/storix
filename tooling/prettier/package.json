@@ -1,5 +1,5 @@
 {
-  "name": "@repo/prettier-config",
+  "name": "@storix/prettier-config",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -17,9 +17,9 @@
     "prettier-plugin-tailwindcss": "^0.6.12"
   },
   "devDependencies": {
-    "@repo/typescript-config": "*",
+    "@storix/typescript-config": "*",
     "@types/node": "^22.15.29",
     "typescript": "^5.8.2"
   },
-  "prettier": "@repo/prettier-config"
+  "prettier": "@storix/prettier-config"
 }

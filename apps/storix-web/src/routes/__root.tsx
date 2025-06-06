@@ -1,88 +1,81 @@
 import {
-  HeadContent,
   Link,
   Outlet,
-  Scripts,
-  createRootRoute,
+  createRootRouteWithContext,
+  useRouterState,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import * as React from "react";
-import { DefaultCatchBoundary } from "~/components/DefaultCatchBoundary";
-import { NotFound } from "~/components/NotFound";
-import appCss from "~/styles/app.css?url";
-import { seo } from "~/utils/seo";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      {
-        charSet: "utf-8",
-      },
-      {
-        name: "viewport",
-        content: "width=device-width, initial-scale=1",
-      },
-      ...seo({
-        title:
-          "TanStack Start | Type-Safe, Client-First, Full-Stack React Framework",
-        description: `TanStack Start is a type-safe, client-first, full-stack React framework. `,
-      }),
-    ],
-    links: [
-      { rel: "stylesheet", href: appCss },
-      {
-        rel: "apple-touch-icon",
-        sizes: "180x180",
-        href: "/apple-touch-icon.png",
-      },
-      {
-        rel: "icon",
-        type: "image/png",
-        sizes: "32x32",
-        href: "/favicon-32x32.png",
-      },
-      {
-        rel: "icon",
-        type: "image/png",
-        sizes: "16x16",
-        href: "/favicon-16x16.png",
-      },
-      { rel: "manifest", href: "/site.webmanifest", color: "#fffff" },
-      { rel: "icon", href: "/favicon.ico" },
-    ],
-  }),
-  errorComponent: (props) => {
-    return (
-      <RootDocument>
-        <DefaultCatchBoundary {...props} />
-      </RootDocument>
-    );
-  },
-  notFoundComponent: () => <NotFound />,
+import { Spinner } from "./-components/spinner";
+import type { TRPCOptionsProxy } from "@trpc/tanstack-react-query";
+import type { AppRouter } from "../../trpc-server.handler";
+import type { QueryClient } from "@tanstack/react-query";
+
+export interface RouterAppContext {
+  trpc: TRPCOptionsProxy<AppRouter>;
+  queryClient: QueryClient;
+}
+
+export const Route = createRootRouteWithContext<RouterAppContext>()({
   component: RootComponent,
 });
 
 function RootComponent() {
-  return (
-    <RootDocument>
-      <Outlet />
-    </RootDocument>
-  );
-}
+  const isFetching = useRouterState({ select: (s) => s.isLoading });
 
-function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html>
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <header>Header</header>
-        {children}
-        <footer>Footer</footer>
-        <TanStackRouterDevtools position="bottom-right" />
-        <Scripts />
-      </body>
-    </html>
+    <>
+      <div className={`min-h-screen flex flex-col`}>
+        <div className={`flex items-center border-b gap-2`}>
+          <h1 className={`text-3xl p-2`}>With tRPC + TanStack Query</h1>
+          {/* Show a global spinner when the router is transitioning */}
+          <div
+            className={`text-3xl duration-300 delay-0 opacity-0 ${
+              isFetching ? ` duration-1000 opacity-40` : ""
+            }`}
+          >
+            <Spinner />
+          </div>
+        </div>
+        <div className={`flex-1 flex`}>
+          <div className={`divide-y w-56`}>
+            {(
+              [
+                ["/", "Home"],
+                ["/dashboard", "Dashboard"],
+              ] as const
+            ).map(([to, label]) => {
+              return (
+                <div key={to}>
+                  <Link
+                    to={to}
+                    activeOptions={
+                      {
+                        // If the route points to the root of it's parent,
+                        // make sure it's only active if it's exact
+                        // exact: to === '.',
+                      }
+                    }
+                    preload="intent"
+                    className={`block py-2 px-3 text-blue-700`}
+                    // Make "active" links bold
+                    activeProps={{ className: `font-bold` }}
+                  >
+                    {label}
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+          <div className={`flex-1 border-l border-gray-200`}>
+            {/* Render our first route match */}
+            <Outlet />
+          </div>
+        </div>
+      </div>
+      <TanStackRouterDevtools position="bottom-left" />
+      <ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />
+    </>
   );
 }
