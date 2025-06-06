@@ -5,6 +5,8 @@ import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import type { AppRouter } from "../../trpc-server.handler";
+import Footer from "~/components/shared/footer";
+import Header from "~/components/shared/header";
 
 export interface RouterAppContext {
   trpc: TRPCOptionsProxy<AppRouter>;
@@ -18,8 +20,10 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 function RootComponent() {
   return (
     <>
-      <main>
+      <main className="px-4">
+        <Header />
         <Outlet />
+        <Footer />
       </main>
       <TanStackRouterDevtools position="bottom-left" />
       <ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />

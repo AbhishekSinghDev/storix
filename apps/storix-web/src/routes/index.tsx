@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { ModeToggle } from "~/-components/shared/mode-toggle";
+import LandingPage from "~/components/landing-page";
 
 export const Route = createFileRoute("/")({
   component: IndexComponent,
@@ -8,8 +8,8 @@ export const Route = createFileRoute("/")({
 
 function IndexComponent() {
   return (
-    <div>
-      <ModeToggle />
-    </div>
+    <main className="mx-auto flex min-h-[100dvh] flex-col">
+      <LandingPage />
+    </main>
   );
 }
