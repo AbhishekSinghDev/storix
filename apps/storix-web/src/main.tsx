@@ -4,7 +4,7 @@ import React from "react";
 import { RouterProvider } from "@tanstack/react-router";
 import ReactDOM from "react-dom/client";
 
-import "./styles.css";
+import "~/styles/app.css";
 
 import { createRouter } from "./router";
 
