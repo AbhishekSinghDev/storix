@@ -3,20 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
-  "type": "module",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./src/index.ts"
-    },
-    "./client": {
-      "types": "./dist/client.d.ts",
-      "default": "./src/client.ts"
-    },
-    "./schema": {
-      "types": "./dist/schema.d.ts",
-      "default": "./src/schema.ts"
-    }
+    ".": "./src/index.ts",
+    "./client": "./src/client.ts",
+    "./schema": "./src/schema.ts"
   },
   "scripts": {
     "clean": "git clean -xdf .cache .turbo dist node_modules",
@@ -32,7 +22,7 @@
     "@neondatabase/serverless": "^1.0.0",
     "drizzle-orm": "^0.44.1",
     "drizzle-zod": "^0.8.2",
-    "zod": "^3.25.51"
+    "zod": "^3.25.55"
   },
   "devDependencies": {
     "@storix/eslint-config": "*",
