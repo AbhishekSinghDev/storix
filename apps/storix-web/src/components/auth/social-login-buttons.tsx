@@ -1,8 +1,10 @@
-import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
+import { useState } from "react";
 
 import { Button } from "~/components/ui/button";
+
+import { authClient } from "~/lib/auth-client";
 
 export function SocialLoginButtons() {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
@@ -23,10 +25,18 @@ export function SocialLoginButtons() {
 
   const handleGithubLogin = async () => {
     setIsGithubLoading(true);
+    
     try {
       // Implement GitHub OAuth login
+
+      await authClient.signIn.social({
+        provider: "github",
+        callbackURL: "/dashboard",
+        errorCallbackURL: "/",
+      });
+
       console.log("GitHub login initiated");
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // await new Promise((resolve) => setTimeout(resolve, 1500));
     } catch (error) {
       console.error("GitHub login error:", error);
     } finally {
@@ -72,6 +82,7 @@ export function SocialLoginButtons() {
         onClick={handleGithubLogin}
         disabled={isGoogleLoading || isGithubLoading}
         className="w-full"
+        onClickCapture={() => handleGithubLogin()}
       >
         {isGithubLoading ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />

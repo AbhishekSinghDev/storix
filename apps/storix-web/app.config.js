@@ -1,4 +1,4 @@
-import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
+import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import reactRefresh from "@vitejs/plugin-react";
 import { createApp } from "vinxi";
 import tsConfigPaths from "vite-tsconfig-paths";
@@ -32,7 +32,7 @@ export default createApp({
 
       target: "browser",
       plugins: () => [
-        TanStackRouterVite({
+        tanstackRouter({
           target: "react",
           autoCodeSplitting: true,
 

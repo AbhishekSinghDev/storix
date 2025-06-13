@@ -45,7 +45,7 @@
       "interactive": true
     }
   },
-  "globalEnv": ["DATABASE_URL", "PUBLIC_NAME"],
+  "globalEnv": ["DATABASE_URL", "PUBLIC_NAME", "GITHUB_CLIENT_ID", "GITHUB_CLIENT_SECRET"],
   "globalPassThroughEnv": [
     "NODE_ENV",
     "CI",

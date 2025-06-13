@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ChevronRight, Menu, X } from "lucide-react";
 
@@ -10,6 +10,8 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setMounted(true);
@@ -70,7 +72,10 @@ const Header = () => {
           >
             Log in
           </Link>
-          <Button className="rounded-full">
+          <Button
+            className="cursor-pointer rounded-full"
+            onClick={() => navigate({ to: "/auth/sign-up" })}
+          >
             Get Started
             <ChevronRight className="ml-1 size-4" />
           </Button>
