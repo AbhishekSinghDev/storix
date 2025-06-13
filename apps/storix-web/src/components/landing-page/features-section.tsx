@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 import { FEATURES } from "~/lib/constants";
 import { Badge } from "../ui/badge";

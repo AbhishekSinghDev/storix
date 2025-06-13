@@ -1,9 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Loader2 } from "lucide-react";
 import { useState } from "react";
+import { Loader2 } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
-
 import { authClient } from "~/lib/auth-client";
 
 export function SocialLoginButtons() {
@@ -25,7 +23,7 @@ export function SocialLoginButtons() {
 
   const handleGithubLogin = async () => {
     setIsGithubLoading(true);
-    
+
     try {
       // Implement GitHub OAuth login
 
@@ -95,14 +93,4 @@ export function SocialLoginButtons() {
       </Button>
     </div>
   );
-}
-
-export const Route = createFileRoute(
-  "/auth/login/components/social-login-buttons",
-)({
-  component: RouteComponent,
-});
-
-function RouteComponent() {
-  return <div>Hello "/auth/login/components/SocialLoginButtons"!</div>;
 }

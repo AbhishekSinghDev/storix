@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
-import { motion } from "framer-motion";
 import { ChevronRight, Menu, X } from "lucide-react";
+import { motion } from "motion/react";
 
 import { Button } from "../ui/button";
 import { ModeToggle } from "./mode-toggle";

@@ -2,10 +2,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createRouter as createTanStackRouter } from "@tanstack/react-router";
 import { createTRPCClient, httpBatchLink } from "@trpc/client";
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query";
+// Import the generated route tree
+// import { ThemeProvider } from "./components/providers/theme-provider";
+import { ThemeProvider } from "next-themes";
 
 import type { AppRouter } from "../trpc-server.handler";
-// Import the generated route tree
-import { ThemeProvider } from "./components/providers/theme-provider";
 import Spinner from "./components/shared/spinner";
 import { routeTree } from "./routeTree.gen";
 
@@ -45,10 +46,14 @@ export function createRouter() {
         <Spinner />
       </div>
     ),
-    Wrap: function WrapComponent({ children }) {
+    Wrap: function WrapComponent({ children }: { children: React.ReactNode }) {
       return (
         <QueryClientProvider client={queryClient}>
-          <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+          <ThemeProvider
+            defaultTheme="dark"
+            attribute="class"
+            storageKey="vite-ui-theme"
+          >
             {children}
           </ThemeProvider>
         </QueryClientProvider>

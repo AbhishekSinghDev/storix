@@ -4,6 +4,7 @@ import LoginForm from "~/components/auth/login-form";
 
 export const Route = createFileRoute("/auth/login/")({
   component: RouteComponent,
+  ssr: false, // Disable SSR for this route to fix Framer Motion
 });
 
 function RouteComponent() {

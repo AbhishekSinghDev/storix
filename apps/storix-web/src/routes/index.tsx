@@ -4,6 +4,8 @@ import LandingPage from "~/components/landing-page";
 
 export const Route = createFileRoute("/")({
   component: IndexComponent,
+  ssr: false,
+  // Disable SSR for this route to fix Framer Motion
 });
 
 function IndexComponent() {

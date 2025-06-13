@@ -2,7 +2,7 @@ import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod/v4";
 
 export const env = createEnv({
-  clientPrefix: "PUBLIC_",
+  clientPrefix: "VITE_PUBLIC_",
   server: {
     // DATABASE_URL: z.string().url(),
     GITHUB_CLIENT_ID: z.string().min(1),
