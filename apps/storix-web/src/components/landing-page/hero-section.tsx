@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
 import { ArrowRight, Check } from "lucide-react";
+import { motion } from "motion/react";
 
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";

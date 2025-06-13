@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
 import { Star } from "lucide-react";
+import { motion } from "motion/react";
 
 import { Badge } from "~/components/ui/badge";
 import { Card, CardContent } from "../ui/card";

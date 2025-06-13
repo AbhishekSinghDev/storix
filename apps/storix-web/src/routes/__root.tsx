@@ -5,12 +5,11 @@ import {
   createRootRouteWithContext,
   HeadContent,
   Outlet,
+  Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 import type { AppRouter } from "../../trpc-server.handler";
-// Use the alias path for more reliable resolution
-import { ThemeProvider } from "~/components/providers/theme-provider";
 import Footer from "~/components/shared/footer";
 import Header from "~/components/shared/header";
 import appCss from "~/styles/app.css?url";
@@ -51,15 +50,16 @@ function RootComponent() {
       <head>
         <HeadContent />
       </head>
-      <ThemeProvider defaultTheme="dark">
+      <body>
         <main className="px-4">
           <Header />
           <Outlet />
           <Footer />
         </main>
-      </ThemeProvider>
-      <TanStackRouterDevtools position="bottom-left" />
-      <ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />
+        <TanStackRouterDevtools position="bottom-left" />
+        <ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />
+        <Scripts />
+      </body>
     </html>
   );
 }

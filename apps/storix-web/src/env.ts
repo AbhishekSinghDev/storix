@@ -1,14 +1,23 @@
-// src/env.ts
+import { createEnv } from "@t3-oss/env-core";
 import { z } from "zod/v4";
 
-// Define schema for public URLs (add more keys as needed)
-const publicUrlSchema = z.object({
-  VITE_PUBLIC_NAME: z.string(),
+export const env = createEnv({
+  clientPrefix: "VITE_PUBLIC_",
+  server: {
+    // DATABASE_URL: z.string().url(),
+    GITHUB_CLIENT_ID: z.string().min(1),
+    GITHUB_CLIENT_SECRET: z.string(),
+  },
+  client: {
+    // PUBLIC_PUBLISHABLE_KEY: z.string().min(1),
+  },
+  /**
+   * Makes sure you explicitly access **all** environment variables
+   * from `server` and `client` in your `runtimeEnv`.
+   */
+  runtimeEnvStrict: {
+    // DATABASE_URL: process.env.DATABASE_URL,
+    GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+    GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
+  },
 });
-
-// Extract only import.meta.env (client + build)
-type ViteEnv = Record<string, string | undefined>;
-const rawEnv = import.meta.env as ViteEnv;
-
-// Validate at runtime (dev or build)
-export const env = publicUrlSchema.parse(rawEnv);

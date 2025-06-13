@@ -11,7 +11,12 @@ export default defineConfig({
     tsConfigPaths({
       projects: ["./tsconfig.json"],
     }),
-    tanstackStart({}),
     tailwindcss(),
+    tanstackStart({
+      tsr: {},
+      spa: {
+        enabled: true,
+      },
+    }),
   ],
 });

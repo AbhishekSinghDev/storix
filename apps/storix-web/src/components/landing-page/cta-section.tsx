@@ -1,5 +1,5 @@
-import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { motion } from "motion/react";
 
 import { Button } from "../ui/button";
 
@@ -14,8 +14,11 @@ const CtaSection = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
           transition={{ duration: 0.5 }}
+          viewport={{
+            once: true,
+            amount: 0.2, // Trigger when 20% of the element is visible
+          }}
           className="flex flex-col items-center justify-center space-y-6 text-center"
         >
           <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">
