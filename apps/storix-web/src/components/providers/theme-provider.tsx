@@ -20,17 +20,25 @@ const initialState: ThemeProviderState = {
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
+// Check if we're running in a browser environment
+const isBrowser = typeof window !== "undefined";
+
 export function ThemeProvider({
   children,
   defaultTheme = "system",
   storageKey = "vite-ui-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) ?? defaultTheme) as Theme,
-  );
+  const [theme, setTheme] = useState<Theme>(() => {
+    if (isBrowser) {
+      return (localStorage.getItem(storageKey) ?? defaultTheme) as Theme;
+    }
+    return defaultTheme;
+  });
 
   useEffect(() => {
+    if (!isBrowser) return;
+
     const root = window.document.documentElement;
 
     root.classList.remove("light", "dark");
@@ -51,7 +59,9 @@ export function ThemeProvider({
   const value = {
     theme,
     setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme);
+      if (isBrowser) {
+        localStorage.setItem(storageKey, theme);
+      }
       setTheme(theme);
     },
   };
