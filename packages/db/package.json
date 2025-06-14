@@ -22,7 +22,7 @@
     "@neondatabase/serverless": "^1.0.0",
     "drizzle-orm": "^0.44.1",
     "drizzle-zod": "^0.8.2",
-    "zod": "^3.25.55"
+    "zod": "^3.25.64"
   },
   "devDependencies": {
     "@storix/eslint-config": "*",
@@ -32,6 +32,6 @@
     "drizzle-kit": "^0.31.1",
     "eslint": "^9.28.0",
     "prettier": "^3.5.3",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   }
 }
