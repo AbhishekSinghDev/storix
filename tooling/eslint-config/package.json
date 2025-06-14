@@ -29,7 +29,7 @@
     "@storix/typescript-config": "*",
     "eslint": "^9.28.0",
     "prettier": "^3.5.3",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
   "prettier": "@storix/prettier-config"
 }
