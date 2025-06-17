@@ -17,8 +17,8 @@
     "prettier-plugin-tailwindcss": "^0.6.12"
   },
   "devDependencies": {
-    "@storix/typescript-config": "*",
-    "@types/node": "^22.15.31",
+    "@storix/tsconfig": "*",
+    "@types/node": "^22.15.29",
     "typescript": "^5.8.3"
   },
   "prettier": "@storix/prettier-config"
