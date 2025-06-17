@@ -1,18 +1,20 @@
 {
-  "extends": "@storix/typescript-config/start.json",
-  "include": ["**/*.ts", "**/*.tsx", "app.config.js"],
+  "extends": "@storix/tsconfig/base.json",
   "compilerOptions": {
-    "strict": true,
-    "esModuleInterop": true,
-    "jsx": "react-jsx",
-    "target": "ESNext",
-    "moduleResolution": "Bundler",
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "lib": ["ES2022", "dom", "dom.iterable"],
+    "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "@/*": ["./src/*"]
+    },
+    "plugins": [{ "name": "next" }],
+    "module": "esnext"
+  },
+  "include": [".", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"],
+  "references": [
+    {
+      "path": "../storix-server"
     }
-  }
+  ]
 }
