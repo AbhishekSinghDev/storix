@@ -4,11 +4,12 @@ import {
   s3BucketEndRegex,
   s3BucketNameRegex,
   s3BucketStartEndRegex,
-  s3ControlCharactersRegex,
   s3IpAddressRegex,
   s3MetadataKeyRegex,
   s3RegionFormatRegex,
-} from "./regex";
+} from "../../regex";
+
+export * from "./form";
 
 export const s3BucketNameSchema = z
   .string()
@@ -40,9 +41,6 @@ export const s3ObjectKeySchema = z
   .max(1024, { error: "Object key must be at most 1024 characters" })
   .refine((key) => !key.startsWith("/"), {
     error: "Object key cannot start with a forward slash",
-  })
-  .refine((key) => !s3ControlCharactersRegex.test(key), {
-    error: "Object key cannot contain control characters",
   });
 
 export const s3RegionSchema = z

@@ -6,7 +6,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./regex": "./src/regex.ts",
-    "./s3": "./src/aws-s3.ts"
+    "./aws/s3": "./src/aws/s3/index.ts"
   },
   "license": "MIT",
   "scripts": {
