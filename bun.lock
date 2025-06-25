@@ -96,6 +96,21 @@
         "typescript": "^5.8.3",
       },
     },
+    "packages/validators": {
+      "name": "@storix/validators",
+      "version": "0.1.0",
+      "dependencies": {
+        "zod": "^3.25.67",
+      },
+      "devDependencies": {
+        "@storix/eslint-config": "*",
+        "@storix/prettier-config": "*",
+        "@storix/tsconfig": "*",
+        "eslint": "^9.28.0",
+        "prettier": "^3.5.3",
+        "typescript": "^5.8.3",
+      },
+    },
     "tooling/eslint": {
       "name": "@storix/eslint-config",
       "version": "0.1.0",
@@ -532,6 +547,8 @@
     "@storix/storix-web": ["@storix/storix-web@workspace:apps/storix-web"],
 
     "@storix/tsconfig": ["@storix/tsconfig@workspace:tooling/typescript"],
+
+    "@storix/validators": ["@storix/validators@workspace:packages/validators"],
 
     "@swc/counter": ["@swc/counter@0.1.3", "", {}, "sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ=="],
 
