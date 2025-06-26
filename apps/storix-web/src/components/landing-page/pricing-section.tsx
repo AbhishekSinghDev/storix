@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PRICING_PLANS } from "@/lib/constants";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 
@@ -30,11 +31,11 @@ const PricingSection = () => {
             Pricing
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-            Simple, Transparent Pricing
+            Choose the plan that fits your needs
           </h2>
           <p className="max-w-[800px] text-muted-foreground md:text-lg">
-            Choose the plan that's right for your business. All plans include a
-            14-day free trial.
+            All plans offer a 14-day free trial, and switching between monthly
+            and annual billing is easy. Annual plans save 20%.
           </p>
         </motion.div>
 
@@ -52,48 +53,7 @@ const PricingSection = () => {
             </div>
             <TabsContent value="monthly">
               <div className="grid gap-6 lg:grid-cols-3 lg:gap-8">
-                {[
-                  {
-                    name: "Starter",
-                    price: "$29",
-                    description: "Perfect for small teams and startups.",
-                    features: [
-                      "Up to 5 team members",
-                      "Basic analytics",
-                      "5GB storage",
-                      "Email support",
-                    ],
-                    cta: "Start Free Trial",
-                  },
-                  {
-                    name: "Professional",
-                    price: "$79",
-                    description: "Ideal for growing businesses.",
-                    features: [
-                      "Up to 20 team members",
-                      "Advanced analytics",
-                      "25GB storage",
-                      "Priority email support",
-                      "API access",
-                    ],
-                    cta: "Start Free Trial",
-                    popular: true,
-                  },
-                  {
-                    name: "Enterprise",
-                    price: "$199",
-                    description: "For large organizations with complex needs.",
-                    features: [
-                      "Unlimited team members",
-                      "Custom analytics",
-                      "Unlimited storage",
-                      "24/7 phone & email support",
-                      "Advanced API access",
-                      "Custom integrations",
-                    ],
-                    cta: "Contact Sales",
-                  },
-                ].map((plan, i) => (
+                {PRICING_PLANS.map((plan, i) => (
                   <motion.div
                     key={i}
                     initial={{ opacity: 0, y: 20 }}
@@ -113,7 +73,7 @@ const PricingSection = () => {
                         <h3 className="text-2xl font-bold">{plan.name}</h3>
                         <div className="flex items-baseline mt-4">
                           <span className="text-4xl font-bold">
-                            {plan.price}
+                            {plan.monthlyPrice}
                           </span>
                           <span className="text-muted-foreground ml-1">
                             /month
@@ -144,48 +104,7 @@ const PricingSection = () => {
             </TabsContent>
             <TabsContent value="annually">
               <div className="grid gap-6 lg:grid-cols-3 lg:gap-8">
-                {[
-                  {
-                    name: "Starter",
-                    price: "$23",
-                    description: "Perfect for small teams and startups.",
-                    features: [
-                      "Up to 5 team members",
-                      "Basic analytics",
-                      "5GB storage",
-                      "Email support",
-                    ],
-                    cta: "Start Free Trial",
-                  },
-                  {
-                    name: "Professional",
-                    price: "$63",
-                    description: "Ideal for growing businesses.",
-                    features: [
-                      "Up to 20 team members",
-                      "Advanced analytics",
-                      "25GB storage",
-                      "Priority email support",
-                      "API access",
-                    ],
-                    cta: "Start Free Trial",
-                    popular: true,
-                  },
-                  {
-                    name: "Enterprise",
-                    price: "$159",
-                    description: "For large organizations with complex needs.",
-                    features: [
-                      "Unlimited team members",
-                      "Custom analytics",
-                      "Unlimited storage",
-                      "24/7 phone & email support",
-                      "Advanced API access",
-                      "Custom integrations",
-                    ],
-                    cta: "Contact Sales",
-                  },
-                ].map((plan, i) => (
+                {PRICING_PLANS.map((plan, i) => (
                   <motion.div
                     key={i}
                     initial={{ opacity: 0, y: 20 }}
@@ -205,12 +124,15 @@ const PricingSection = () => {
                         <h3 className="text-2xl font-bold">{plan.name}</h3>
                         <div className="flex items-baseline mt-4">
                           <span className="text-4xl font-bold">
-                            {plan.price}
+                            {plan.annualPrice}
                           </span>
                           <span className="text-muted-foreground ml-1">
                             /month
                           </span>
                         </div>
+                        <p className="text-sm text-muted-foreground">
+                          {plan.annualTotal}
+                        </p>
                         <p className="text-muted-foreground mt-2">
                           {plan.description}
                         </p>
@@ -235,6 +157,15 @@ const PricingSection = () => {
               </div>
             </TabsContent>
           </Tabs>
+
+          <div className="mt-8 text-center">
+            <p className="text-sm text-muted-foreground">
+              Note: Your cloud provider's storage fees apply separately.
+              <br />
+              For example, AWS S3 Standard costs about $0.023/GB (first
+              50TB/month).
+            </p>
+          </div>
         </div>
       </div>
     </section>

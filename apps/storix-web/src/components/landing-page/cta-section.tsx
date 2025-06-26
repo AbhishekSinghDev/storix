@@ -20,11 +20,12 @@ const CtaSection = () => {
           className="flex flex-col items-center justify-center space-y-6 text-center"
         >
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight">
-            Ready to Transform Your Workflow?
+            Get Started Today
           </h2>
           <p className="mx-auto max-w-[700px] text-primary-foreground/80 md:text-xl">
-            Join thousands of satisfied customers who have streamlined their
-            processes and boosted productivity with our platform.
+            Ready to try Storix? Sign up now for a free trial and connect your
+            AWS keys to start uploading files at lightning speed. Take control
+            of your cloud storage – start your journey with Storix today!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 mt-4">
             <Button
@@ -40,11 +41,11 @@ const CtaSection = () => {
               variant="outline"
               className="rounded-full h-12 px-8 text-base bg-transparent border-white text-white hover:bg-white/10"
             >
-              Schedule a Demo
+              Learn More
             </Button>
           </div>
           <p className="text-sm text-primary-foreground/80 mt-4">
-            No credit card required. 14-day free trial. Cancel anytime.
+            No credit card required. Connect your AWS keys securely.
           </p>
         </motion.div>
       </div>

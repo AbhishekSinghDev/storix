@@ -4,7 +4,14 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { motion } from "framer-motion";
 
-import { BarChart, Layers, Shield, Star, Users, Zap } from "lucide-react";
+import {
+  CloudLightning,
+  CloudUpload,
+  HardDrive,
+  Search,
+  Server,
+  Users,
+} from "lucide-react";
 
 const container = {
   hidden: { opacity: 0 },
@@ -23,40 +30,40 @@ const item = {
 
 const features = [
   {
-    title: "Smart Automation",
+    title: "Bring Your Own Storage",
     description:
-      "Automate repetitive tasks and workflows to save time and reduce errors.",
-    icon: <Zap className="size-5" />,
+      "Connect any AWS S3 or S3-compatible bucket in minutes. Retain full control and avoid vendor lock-in.",
+    icon: <CloudUpload className="size-5" />,
   },
   {
-    title: "Advanced Analytics",
+    title: "Ultra-fast Uploads",
     description:
-      "Gain valuable insights with real-time data visualization and reporting.",
-    icon: <BarChart className="size-5" />,
+      "Lightning-fast uploads using AWS Transfer Acceleration and parallel multipart uploads.",
+    icon: <CloudLightning className="size-5" />,
+  },
+  {
+    title: "Multi-Cloud Flexibility",
+    description:
+      "Add multiple cloud providers to optimize storage performance, cost, and compliance.",
+    icon: <Server className="size-5" />,
   },
   {
     title: "Team Collaboration",
     description:
-      "Work together seamlessly with integrated communication tools.",
+      "Share folders and files with fine-grained permissions and activity tracking. (Coming soon)",
     icon: <Users className="size-5" />,
   },
   {
-    title: "Enterprise Security",
+    title: "Offline Access & Versioning",
     description:
-      "Keep your data safe with end-to-end encryption and compliance features.",
-    icon: <Shield className="size-5" />,
+      "Local caching for offline use with version history for file recovery. (Future feature)",
+    icon: <HardDrive className="size-5" />,
   },
   {
-    title: "Seamless Integration",
+    title: "File Previews & Search",
     description:
-      "Connect with your favorite tools through our extensive API ecosystem.",
-    icon: <Layers className="size-5" />,
-  },
-  {
-    title: "24/7 Support",
-    description:
-      "Get help whenever you need it with our dedicated support team.",
-    icon: <Star className="size-5" />,
+      "Browse and preview images, PDFs, and media with quick search by name and content.",
+    icon: <Search className="size-5" />,
   },
 ];
 
@@ -78,12 +85,12 @@ const FeaturesSection = () => {
             Features
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-            Everything You Need to Succeed
+            Enterprise-Grade Cloud Storage Features
           </h2>
           <p className="max-w-[800px] text-muted-foreground md:text-lg">
-            Our comprehensive platform provides all the tools you need to
-            streamline your workflow, boost productivity, and achieve your
-            goals.
+            Storix offers a comprehensive feature set tailored for developers
+            and teams who need secure, fast, and flexible cloud storage
+            solutions.
           </p>
         </motion.div>
 
