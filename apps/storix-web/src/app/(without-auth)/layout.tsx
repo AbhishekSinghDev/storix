@@ -1,9 +1,9 @@
-import "../index.css";
+import "../../index.css";
 
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 
-import Providers from "@/components/providers/providers";
+import { UnauthenticatedProviders } from "@/components/providers/providers";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -24,9 +24,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${outfit.variable} antialiased`}>
-        <Providers>
+        <UnauthenticatedProviders>
           <>{children}</>
-        </Providers>
+        </UnauthenticatedProviders>
       </body>
     </html>
   );
