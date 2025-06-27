@@ -3,7 +3,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, CloudLightning, CloudUpload, Shield } from "lucide-react";
 
 const HeroSection = () => {
   return (
@@ -21,19 +21,19 @@ const HeroSection = () => {
             className="mb-4 rounded-full px-4 py-1.5 text-sm font-medium"
             variant="secondary"
           >
-            Launching Soon
+            Your Cloud, Your Keys
           </Badge>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
-            Elevate Your Workflow with SaaSify
+            Next-Generation Cloud Storage with Storix
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            The all-in-one platform that helps teams collaborate, automate, and
-            deliver exceptional results. Streamline your processes and focus on
-            what matters most.
+            Bring your own AWS S3 storage and enjoy enterprise-grade performance
+            with 99.999999999% durability. No vendor lock-in, just blazing-fast
+            uploads with modern web UI.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="rounded-full h-12 px-8 text-base">
-              Start Free Trial
+              Connect Your Storage
               <ArrowRight className="ml-2 size-4" />
             </Button>
             <Button
@@ -41,21 +41,21 @@ const HeroSection = () => {
               variant="outline"
               className="rounded-full h-12 px-8 text-base"
             >
-              Book a Demo
+              View Live Demo
             </Button>
           </div>
-          <div className="flex items-center justify-center gap-4 mt-6 text-sm text-muted-foreground">
-            <div className="flex items-center gap-1">
-              <Check className="size-4 text-primary" />
-              <span>No credit card</span>
+          <div className="flex items-center justify-center gap-6 mt-8 text-sm">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <CloudLightning className="size-4 text-primary" />
+              <span>Ultra-fast uploads</span>
             </div>
-            <div className="flex items-center gap-1">
-              <Check className="size-4 text-primary" />
-              <span>14-day trial</span>
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <CloudUpload className="size-4 text-primary" />
+              <span>Bring your own storage</span>
             </div>
-            <div className="flex items-center gap-1">
-              <Check className="size-4 text-primary" />
-              <span>Cancel anytime</span>
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Shield className="size-4 text-primary" />
+              <span>Secure & durable</span>
             </div>
           </div>
         </motion.div>
@@ -71,7 +71,7 @@ const HeroSection = () => {
               src="https://cdn.dribbble.com/userupload/12302729/file/original-fa372845e394ee85bebe0389b9d86871.png?resize=1504x1128&vertical=center"
               width={1280}
               height={720}
-              alt="SaaSify dashboard"
+              alt="Storix cloud storage dashboard"
               className="w-full h-auto"
             />
             <div className="absolute inset-0 rounded-xl ring-1 ring-inset ring-black/10 dark:ring-white/10"></div>

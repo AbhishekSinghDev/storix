@@ -6,6 +6,7 @@ import { Menu, Moon, Sun, X } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Logo from "../shared/logo";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -39,9 +40,7 @@ const Header = () => {
     >
       <div className="container max-w-screen-xl mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center space-x-4">
-          <Link href="/" className="text-lg font-semibold">
-            Logo
-          </Link>
+          <Logo />
           <nav className="hidden space-x-4 md:flex">
             <Link href="/" className="hover:text-primary">
               Home
