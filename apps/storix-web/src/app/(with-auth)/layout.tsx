@@ -3,6 +3,8 @@ import "../../index.css";
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 
+import "@/env";
+
 import { AuthenticatedProviders } from "@/components/providers/providers";
 
 const outfit = Outfit({

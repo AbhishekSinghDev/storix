@@ -1,104 +1,162 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { authClient } from "@/lib/auth-client"
-import { Github } from "lucide-react"
-import Link from "next/link"
-import { useState } from "react"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
+import { authClient } from "@/lib/auth-client";
+import { Github } from "lucide-react";
+import Link from "next/link";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { toast } from "sonner";
+
+const formSchema = z.object({
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
+  password: z.string().min(6, {
+    message: "Password must be at least 6 characters.",
+  }),
+});
 
 export default function SigninForm() {
-  const [email, setEmail] = useState<string>("")
-  const [password, setPassword] = useState<string>("")
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-
-  async function handleSignInEmail(){
-    const data = authClient.signIn.email({
-      email, 
-      password,
-    }, {
-      onError: (ctx) => {
-          // Handle the error
-          if(ctx.error.status === 403) {
-              alert("Please verify your email address")
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    await authClient.signIn.email(
+      {
+        email: values.email,
+        password: values.password,
+        callbackURL: "/dashboard",
+      },
+      {
+        onError: (ctx) => {
+          if (ctx.error.status === 403) {
+            toast.error("Please verify your email address");
           }
-          //you can also show the original error message
-          alert(ctx.error.message)
-      }})
+          toast.error(ctx.error.message);
+        },
+      }
+    );
+  };
 
-      console.log(data)
+  async function handleGithubAuth() {
+    await authClient.signIn.social({
+      provider: "github",
+      callbackURL: "/dashboard",
+    });
   }
 
-  async function handleGithubAuth(){
-      const data = await authClient.signIn.social({
-        provider : "github",
-        callbackURL : "/home"  //temp for now
-      })
-  
-      console.log(data)
-    }
-
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md bg-gray-900 border-gray-800">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-800">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-white">Welcome back</CardTitle>
-          <CardDescription className="text-gray-400">Enter your credentials to access your account</CardDescription>
+          <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">
+            Welcome back
+          </CardTitle>
+          <CardDescription className="text-gray-600 dark:text-gray-400">
+            Enter your credentials to access your account
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-200">
-              Email
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="john@example.com"
-              className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus:border-purple-500 focus:ring-purple-500"
-              required
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="password" className="text-gray-200">
-                Password
-              </Label>
-              <Link href="/forgot-password" className="text-sm text-purple-400 hover:text-purple-300 underline">
-                Forgot password?
-              </Link>
-            </div>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus:border-purple-500 focus:ring-purple-500"
-              required
-              onChange={(e) => setPassword(e.target.value)}
-
-            />
-          </div>
-
-          <Button type="submit" className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium cursor-pointer" onClick={handleSignInEmail}>
-            Sign in
-          </Button>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700 dark:text-gray-200">
+                      Email
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="john@example.com"
+                        className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-500 focus:border-purple-500 focus:ring-purple-500"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="flex items-center justify-between">
+                      <FormLabel className="text-gray-700 dark:text-gray-200">
+                        Password
+                      </FormLabel>
+                      <Link
+                        href="/forgot-password"
+                        className="text-sm text-purple-600 dark:text-purple-400 hover:text-purple-500 dark:hover:text-purple-300 underline"
+                      >
+                        Forgot password?
+                      </Link>
+                    </div>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="••••••••"
+                        className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-500 focus:border-purple-500 focus:ring-purple-500"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                type="submit"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium"
+              >
+                Sign in
+              </Button>
+            </form>
+          </Form>
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <Separator className="w-full bg-gray-700" />
+              <Separator className="w-full bg-gray-300 dark:bg-gray-700" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-gray-900 px-2 text-gray-400">Or continue with</span>
+              <span className="bg-white dark:bg-gray-900 px-2 text-gray-500 dark:text-gray-400">
+                Or continue with
+              </span>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <Button
               variant="outline"
-              className="bg-gray-800 border-gray-700 text-white hover:bg-gray-700 hover:text-white cursor-pointer"
+              className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white cursor-pointer"
             >
               <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                 <path
@@ -122,7 +180,7 @@ export default function SigninForm() {
             </Button>
             <Button
               variant="outline"
-              className="bg-gray-800 border-gray-700 text-white hover:bg-gray-700 hover:text-white cursor-pointer"
+              className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white cursor-pointer"
               onClick={handleGithubAuth}
             >
               <Github className="mr-2 h-4 w-4" />
@@ -130,14 +188,17 @@ export default function SigninForm() {
             </Button>
           </div>
 
-          <div className="text-center text-sm text-gray-400">
+          <div className="text-center text-sm text-gray-500 dark:text-gray-400">
             Don't have an account?{" "}
-            <Link href="/auth/sign-up" className="text-purple-400 hover:text-purple-300 underline cursor-pointer">
+            <Link
+              href="/auth/sign-up"
+              className="text-purple-600 dark:text-purple-400 hover:text-purple-500 dark:hover:text-purple-300 underline cursor-pointer"
+            >
               Sign up
             </Link>
           </div>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
